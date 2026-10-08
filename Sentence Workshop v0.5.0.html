@@ -4185,7 +4185,11 @@ const GOOGLE_SYNC = (() => {
     const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),15000);
     try{
       const response=await fetch(url,{...options,headers:{...options.headers,Authorization:'Bearer '+access},signal:controller.signal});
-      if(!response.ok){const error=Error(response.status===401?'Google sign-in expired. Click Reconnect Google; your work is kept here.':response.status===403?'Google Drive access is blocked or storage is full. Your work is kept here.':'Google saving is unavailable. Your work is kept here; try Sync now.');error.status=response.status;throw error;}
+      if(!response.ok){
+        let message=response.status===401?'Google sign-in expired. Click Reconnect Google; your work is kept here.':response.status===403?'Google Drive access is blocked or storage is full. Your work is kept here.':'Google saving is unavailable. Your work is kept here; try Sync now.';
+        if(response.status===403){try{const data=JSON.parse(await response.text());if(data.error?.details?.some(item=>item.reason==='SERVICE_DISABLED'&&item.metadata?.service==='drive.googleapis.com')||url.includes('/drive/')&&data.error?.errors?.some(item=>item.reason==='accessNotConfigured'))message='The Google Drive API needs to be enabled for SentenceWorkshop. The app owner must enable it, then sign in again. Existing progress is unchanged.';}catch{}}
+        const error=Error(message);error.status=response.status;throw error;
+      }
       const raw=await response.text();if(raw.length>10000000)throw Error('Google progress is too large to load safely. It has not been replaced.');return raw?JSON.parse(raw):null;
     }finally{clearTimeout(timeout);}
   }
