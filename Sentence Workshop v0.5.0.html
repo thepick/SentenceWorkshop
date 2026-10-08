@@ -4201,12 +4201,14 @@ const GOOGLE_SYNC = (() => {
       if(!file.name?.startsWith(prefix))throw Error('Unexpected Google progress file. Existing files have not been replaced.');
       const snapshot=validate(await request(api+'/'+encodeURIComponent(file.id)+'?alt=media',{},access),account);data=merge(data,snapshot);if(snapshot.device===device)owned.push(file.id);
     }
+    if(files.length>=100&&!owned.length)throw Error('This account has reached the device-save limit. Existing Google progress has not been replaced.');
     return {data,fileId:owned[0]||''};
   }
   async function writeDrive(data,id,access){
-    if(id){await request('https://www.googleapis.com/upload/drive/v3/files/'+encodeURIComponent(id)+'?uploadType=media',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)},access);return id;}
+    validate(data,data.owner);const raw=JSON.stringify(data);if(raw.length>10000000)throw Error('Progress is too large to sync safely. Existing Google progress has not been replaced.');
+    if(id){await request('https://www.googleapis.com/upload/drive/v3/files/'+encodeURIComponent(id)+'?uploadType=media',{method:'PATCH',headers:{'Content-Type':'application/json'},body:raw},access);return id;}
     const boundary='sentence_workshop_'+PROGRESS.id().replace(/[^a-zA-Z0-9]/g,''),meta={name:prefix+device+'.json',parents:['appDataFolder'],appProperties:{app:'SentenceWorkshop-v1'}};
-    const body='--'+boundary+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(meta)+'\r\n--'+boundary+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(data)+'\r\n--'+boundary+'--';
+    const body='--'+boundary+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(meta)+'\r\n--'+boundary+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+raw+'\r\n--'+boundary+'--';
     const result=await request('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+boundary},body},access);
     if(typeof result?.id!=='string')throw Error('Google did not confirm the save. Your work is kept here.');return result.id;
   }
