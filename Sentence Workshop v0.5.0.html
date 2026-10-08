@@ -17,8 +17,9 @@ body{min-height:100vh}.choice-trays{display:grid;grid-template-columns:minmax(0,
 
 .student-menu{margin:-12px 0 20px;font-size:14px}.student-menu>summary{font-size:14px;color:var(--muted)}.student-controls{display:flex;align-items:end;flex-wrap:wrap;gap:10px;padding:12px 0}.student-controls label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}select,input{font:inherit;color:var(--ink);border:1px solid var(--line);border-radius:7px;min-height:40px;padding:6px 8px;background:white;max-width:100%}.backup-menu{margin:0}.backup-menu summary{font-size:13px}.backup-label{cursor:pointer}.backup-label input{max-width:240px;font-size:12px}.course-progress{display:flex;flex-direction:column;gap:3px;padding:10px 12px;margin:12px 0;background:#f3f5f7;border-radius:8px;font-size:12px;color:var(--muted)}.course-progress strong{font-size:13px;color:var(--ink)}.course-progress small{font-size:11px}.chapter-progress{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:4px}.chapter button{position:relative;padding-right:27px}.lesson-status{position:absolute;right:9px;top:10px;color:var(--muted)}.chapter button[data-status="Ready for review"] .lesson-status,.chapter button[data-status="Checkpoint passed"] .lesson-status{color:var(--green)}.chapter button[aria-current=page]{border-left:4px solid var(--blue)}.mixed-review{border-top:2px solid var(--line)}.workspace button.pos-tile::after{content:attr(data-pos-name);font-size:9px;letter-spacing:0}.workspace button.pos-tile,.word-list button.pos-tile,.punctuation button.pos-tile{box-shadow:0 2px 0 #20334312}.actions #undo,.actions #clear{border-color:var(--line)}.checkpoint-feedback{margin:16px 0;padding:14px;background:#f3f5f7;border-radius:10px;font-size:14px}.checkpoint-feedback button{margin:4px;font-size:13px}#studied-review{margin:0 0 14px;font-size:13px}
 .google-controls{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}.google-controls button{font-size:13px}.google-controls span{font-size:12px;color:var(--muted);overflow-wrap:anywhere}#google-status{font-size:12px;margin:-18px 0 20px;color:var(--muted)}#local-student-controls{display:flex;align-items:end;gap:10px;flex-wrap:wrap}#copy-local-progress{font-size:12px;text-align:left}
+#google-dot{width:8px;height:8px;border-radius:50%;background:#94a3b8;display:inline-block;flex:0 0 auto}#google-dot[data-state="synced"]{background:#10b981}#google-dot[data-state="syncing"]{background:#f59e0b}#google-dot[data-state="error"]{background:#ef4444}
 </style></head><body id="app-body"><a class="activity-shortcut" href="#challenge-title">Skip to activity</a><main>
-<header><h1>Sentence Workshop</h1><div class="google-controls"><span id="google-account" hidden></span><button id="google-signin" disabled>Sign in with Google</button><button id="google-sync" class="quiet" hidden>Sync now</button><button id="google-signout" class="quiet" hidden>Sign out</button></div></header><p id="google-status" role="status"></p>
+<header><h1>Sentence Workshop</h1><div class="google-controls"><span id="google-dot" data-state="signed-out" aria-hidden="true" title="Not signed in"></span><span id="google-account" hidden></span><button id="google-signin" disabled>Sign in with Google</button><button id="google-sync" class="quiet" hidden>Sync now</button><button id="google-signout" class="quiet" hidden>Sign out</button></div></header><p id="google-status" role="status"></p>
 <details id="student-menu" class="student-menu"><summary id="student-label">Student · not saving</summary><div class="student-controls"><div id="local-student-controls"><label>Your name<select id="student-select" aria-label="Choose student"></select></label><label>New student name or class code<input id="student-name" maxlength="40" autocomplete="off"></label><button id="add-student" class="quiet">Add student</button></div><button id="copy-local-progress" class="quiet" hidden></button><details class="backup-menu"><summary>Progress backup</summary><button id="export-progress" class="quiet">Save backup</button><label class="backup-label">Import backup<input id="import-progress" type="file" accept=".json,application/json"></label></details></div><p id="save-status" class="hint" role="status"></p><p id="local-student-help" class="hint">Choose your own name each visit. Local profiles stay in this browser; save a backup before changing browser or HTML version. Local profiles are not password protected.</p></details>
 <button id="studied-review" class="quiet" hidden>Review studied tenses</button>
 <div id="app-layout" class="app-layout"><nav class="lesson-nav" aria-label="Chapters and lessons"><details open class="lesson-menu"><summary>Lessons</summary><div id="lessons"></div></details></nav>
@@ -4222,37 +4223,37 @@ const GOOGLE_SYNC = (() => {
     if(!token||Date.now()>=expires){hooks.status('Google sign-in expired. Click Reconnect Google; your work is kept here.');hooks.reconnect();return false;}
     const account=owner,session=epoch,access=token;let again=false;
     running=(async()=>{
-      hooks.status('Saving to Google…');
+      hooks.status('Saving to Google…','syncing');
       try{
         const remote=await readDrive(account,access);if(session!==epoch)return false;
         let data=merge(envelope(),remote.data);data.device=device;data.profile.name=profile.name;
         profile.attempts=data.profile.attempts;profile.removedAttempts=data.profile.removedAttempts;hooks.merged(copy(profile));cache(envelope());
         const sent=JSON.stringify(profile),payload=envelope();fileId=await writeDrive(payload,remote.fileId||fileId,access);if(session!==epoch)return false;
-        dirty=JSON.stringify(profile)!==sent;again=dirty;hooks.status(dirty?'Saved here · waiting to save changes to Google…':'Saved to Google.');return true;
+        dirty=JSON.stringify(profile)!==sent;again=dirty;hooks.status(dirty?'Saved here · waiting to save changes to Google…':'Saved to Google.',dirty?'syncing':'synced');return true;
       }catch(error){if(session===epoch){dirty=true;hooks.status(errorMessage(error));if(error.status===401){token='';hooks.reconnect();}}return false;}
       finally{running=null;if(again&&session===epoch){clearTimeout(timer);timer=setTimeout(()=>{timer=null;flush();},1800);}}
     })();return running;
   }
   function changed(student){
     if(!owner||student.id!=='google:'+owner)return;
-    profile=copy(student);const stored=cache(envelope());dirty=true;if(stored)hooks.status('Saved here · waiting to save to Google…');clearTimeout(timer);timer=setTimeout(()=>{timer=null;flush();},1800);
+    profile=copy(student);const stored=cache(envelope());dirty=true;if(stored)hooks.status('Saved here · waiting to save to Google…','syncing');clearTimeout(timer);timer=setTimeout(()=>{timer=null;flush();},1800);
   }
   async function signedIn(response){
     if(!response?.access_token||response.error||!google.accounts.oauth2.hasGrantedAllScopes(response,scope)){requesting=false;hooks.busy(false);hooks.status('Google Drive permission was not granted. Existing progress is unchanged.');return;}
-    const access=response.access_token,session=++epoch;hooks.status('Loading your Google progress…');
+    const access=response.access_token,session=++epoch;hooks.status('Loading your Google progress…','syncing');
     try{
       const user=await request('https://www.googleapis.com/oauth2/v3/userinfo',{},access);
       if(typeof user?.sub!=='string'||!/^[a-zA-Z0-9_-]{1,80}$/.test(user.sub)||typeof user.email!=='string'||user.email_verified!==true)throw Error('Google could not confirm this account. Existing progress is unchanged.');
       const cached=readCache(user.sub),remote=await readDrive(user.sub,access);if(session!==epoch)return;
       let data=merge(cached,remote.data);
       if(!data)data={app:'SentenceWorkshop',schema:1,owner:user.sub,device,updatedAt:0,profile:{id:'google:'+user.sub,name:(user.name||user.email).slice(0,40),attempts:[],view:null,updatedAt:0}};
-      validate(data,user.sub);owner=user.sub;token=access;expires=Date.now()+Math.max(0,Number(response.expires_in||3600)-60)*1000;profile=data.profile;profile.name=(user.name||user.email).slice(0,40);fileId=remote.fileId;dirty=true;cache(envelope());hooks.connected(copy(profile),user.email);hooks.status('Connected · saving your progress…');
+      validate(data,user.sub);owner=user.sub;token=access;expires=Date.now()+Math.max(0,Number(response.expires_in||3600)-60)*1000;profile=data.profile;profile.name=(user.name||user.email).slice(0,40);fileId=remote.fileId;dirty=true;cache(envelope());hooks.connected(copy(profile),user.email);hooks.status('Connected · saving your progress…','syncing');
     }catch(error){hooks.status(errorMessage(error));}
     finally{requesting=false;hooks.busy(false);}
     if(owner&&session===epoch)await flush();
   }
   function signIn(){
-    if(!ready||requesting||running)return;requesting=true;hooks.busy(true);hooks.status('Choose your Google account…');
+    if(!ready||requesting||running)return;requesting=true;hooks.busy(true);hooks.status('Choose your Google account…','syncing');
     try{client.requestAccessToken({prompt:'select_account'});}catch(error){requesting=false;hooks.busy(false);hooks.status(errorMessage(error));}
   }
   async function signOut(){
@@ -4260,7 +4261,7 @@ const GOOGLE_SYNC = (() => {
     hooks.busy(true);
     try{
       if(owner&&dirty&&(!await flush()||dirty)){hooks.status('Your latest work has not reached Google. Retry Sync now before signing out, or save a backup and close the page.');return;}
-      ++epoch;clearTimeout(timer);token='';expires=0;owner='';profile=null;fileId='';dirty=false;hooks.disconnected();hooks.status('Signed out. Sign in with Google to restore your progress.');
+      ++epoch;clearTimeout(timer);token='';expires=0;owner='';profile=null;fileId='';dirty=false;hooks.disconnected();hooks.status('Signed out. Sign in with Google to restore your progress.','signed-out');
     }finally{hooks.busy(false);}
   }
   function init(callbacks){
@@ -4764,12 +4765,15 @@ const UI = (() => {
     completed.length=saved.completedLength;bank=currentActivity.bank;framework=currentActivity.framework;menuOpen=false;revision++;dismissSkip();
     renderChallenge();renderFeedback();get('lesson-card').open=saved.lessonOpen;get('skip-pair').focus();saveProgress();
   }
+  function googleStatus(message,state='error'){
+    get('google-status').textContent=message;get('google-dot').setAttribute('data-state',state);get('google-dot').title=message;
+  }
   function init(){
     studentMenu();get('student-menu').open=true;
     GOOGLE_SYNC.init({
-      status:message=>get('google-status').textContent=message,
-      available:()=>{get('google-signin').disabled=false;get('google-status').textContent='Sign in with Google to save your progress across devices.';},
-      unavailable:message=>{get('google-signin').disabled=true;get('google-status').textContent=message;},
+      status:googleStatus,
+      available:()=>{get('google-signin').disabled=false;googleStatus('Sign in with Google to save your progress across devices.','signed-out');},
+      unavailable:message=>{get('google-signin').disabled=true;googleStatus(message,'signed-out');},
       busy:value=>{get('app-layout').inert=value;get('student-menu').inert=value;get('studied-review').disabled=value;for(const id of ['google-signin','google-sync','google-signout'])get(id).disabled=value;},
       reconnect:()=>{get('google-signin').hidden=false;get('google-signin').textContent='Reconnect Google';},
       connected:(person,email)=>{if(!googleSession&&student.id!=='session')localCandidate=PROGRESS.clone(student);googleSession=true;restoreStudent(person);get('google-account').textContent=email;get('google-account').hidden=false;get('google-signin').hidden=true;get('google-sync').hidden=false;get('google-signout').hidden=false;},
