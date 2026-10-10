@@ -2,7 +2,7 @@
 
 An interactive English grammar course for Grade 5 learners. Students learn parts of speech, build sentences with editable word tiles, and develop their use of six verb tenses through guided practice and reviews.
 
-**[Open Sentence Workshop](https://sentenceworkshop.mtomlinson.ca/)** · [Privacy](https://sentenceworkshop.mtomlinson.ca/privacy.html) · [Current single-file app: v0.7.5](Sentence%20Workshop%20v0.7.5.html)
+**[Open Sentence Workshop](https://sentenceworkshop.mtomlinson.ca/)** · [Privacy](https://sentenceworkshop.mtomlinson.ca/privacy.html) · [Current single-file app: v0.7.6](Sentence%20Workshop%20v0.7.6.html)
 
 **Temporary open testing mode:** Google sign-in is suspended. All Introduction and chapter lessons, activities, chapter reviews and the mixed-tense review are available immediately. Work is saved in this browser; it does not synchronize across devices. Scores and earned completion still reflect submitted work.
 
@@ -30,7 +30,7 @@ The grammar checker runs in the browser. It does not use AI to assess student an
 | Chapter 5 | Simple future | 6 building lessons + 12-question review |
 | Chapter 6 | Future continuous | 6 building lessons + 12-question review |
 
-Building lessons develop from a simple sentence to articles, adjectives, adverbs, time expressions and joined ideas. All 44 teaching illustrations are embedded in the app, with descriptive alt text. A mixed-tense review provides optional continued practice after the building chapters; a shorter review becomes available after passing at least two building chapters.
+Building lessons develop from a simple sentence to articles, adjectives, adverbs, time expressions and joined ideas. All 44 teaching illustrations have descriptive alt text. The hosted app loads the current illustration from `lesson-images/`; the downloadable single-file edition embeds every illustration for offline use. A mixed-tense review provides optional continued practice after the building chapters; a shorter review becomes available after passing at least two building chapters.
 
 **Words and their jobs** is subtitled **An introduction to parts of speech**. Its eight teaching images highlight and label only the target word class; other sentence words and punctuation remain plain. The taller pronoun card places an illustrated object-pronoun example below the subject-pronoun section.
 
@@ -49,7 +49,9 @@ Sentence Workshop is in beta testing. Access restrictions are temporarily bypass
 
 In standard mode, every account follows the same sequence: finish each Introduction lesson, pass its review, then finish the six lessons and review in each building chapter before starting the next. These rules and Google sign-in are retained for reinstatement. Earlier earned passes remain valid; old access flags do not bypass prerequisites.
 
-The interface adapts to desktop and phone screens. Buttons and keyboard alternatives are available alongside dragging. Automated browser checks use Chrome; native touch dragging and screen-reader behavior have not been fully verified.
+The interface adapts to desktop, tablet and phone screens. At widths up to 1000 pixels, Lessons becomes a collapsed picker and closes after an activity is selected. Wider screens retain the sidebar. Touch devices have larger word and punctuation tiles; tapping a sentence tile opens Move left, Move right, Insert before and Remove alongside its word forms. These extra buttons are absent on mouse-only desktops. Touchscreen computers also receive the touch controls. All edits support Undo and retain the existing saved-draft behavior. Parts-of-speech labels remain centered beneath their tiles at a readable 12 pixels.
+
+Narrow screens place category headings above the word choices and punctuation beside the bank. View larger opens a scrollable lesson image with its text description; Close or Escape returns to the lesson. Automated browser checks use Chrome with touch emulation; physical-device gestures and screen-reader behavior have not been fully verified.
 
 ## Progress and reviews
 
@@ -95,10 +97,12 @@ There is no separate application database, advertising or analytics. See the [pr
 
 ## Running and maintaining the app
 
-The course is a static HTML application with JavaScript, styles and lesson images embedded. Browser and device icons are separate files alongside the app. No package installation, build step or application server is required to preview the course.
+The course is a static HTML application with JavaScript and styles embedded. The hosted page loads teaching images separately, while the versioned download keeps them embedded. Browser and device icons are separate files alongside the app. No package installation or application server is required to open the self-contained download.
 
 - `index.html` is the live entry point.
-- `Sentence Workshop v0.7.5.html` is the matching versioned release.
+- `Sentence Workshop v0.7.6.html` is the self-contained versioned release.
+- `lesson-images/` contains the hosted teaching images, with content hashes in their filenames.
+- `scripts/build-hosted.cjs` generates `index.html` and its teaching images from the self-contained release.
 - `privacy.html` contains the privacy policy.
 - `favicon.svg` and `favicon.ico` provide scalable and multi-size browser-tab icons.
 - `icons/` contains PNG icons from 16 to 512 pixels, including Apple and maskable variants.
@@ -111,9 +115,15 @@ Download and open the current HTML file to try activities. Keep the icon files a
 
 ### Restore standard access when testing ends
 
-Set the top-level `const TESTING_MODE = true;` to `false` in `index.html` and its matching versioned release, then publish both. This single switch restores Google sign-in, sequential Introduction lessons and chapters, review prerequisites, and the review navigation lock. It has no URL or student-facing override. Existing Google data is retained; browser-only testing work is not automatically selected or uploaded in standard mode. Update this README and the privacy page to describe the active mode when switching back.
+Set the top-level `const TESTING_MODE = true;` to `false` in the current self-contained release, regenerate the hosted app, then publish both. This single switch restores Google sign-in, sequential Introduction lessons and chapters, review prerequisites, and the review navigation lock. It has no URL or student-facing override. Existing Google data is retained; browser-only testing work is not automatically selected or uploaded in standard mode. Update this README and the privacy page to describe the active mode when switching back.
 
-GitHub Pages publishes the root of the `main` branch. Keep `index.html` and the current versioned release identical when making an app update. Preserve the existing account-storage keys and validate compatibility before changing progress data. Student backups, account caches and credentials do not belong in this public repository.
+GitHub Pages publishes the root of the `main` branch. Edit the current self-contained release, then regenerate the hosted copy with Node.js (no build dependencies):
+
+```sh
+node scripts/build-hosted.cjs "Sentence Workshop v0.7.6.html"
+```
+
+The two editions share the same application code and teaching metadata; only image sources differ. Publish `index.html` together with `lesson-images/` and the versioned release. The generator validates all 44 image files and keeps hosted HTML below 500 KB. Preserve the existing account-storage keys and validate compatibility before changing progress data. Student backups, account caches and credentials do not belong in this public repository.
 
 ### Browser and device icons
 
@@ -143,6 +153,8 @@ v0.7.4 adds the congratulations screen and its practice/revisit options. Complet
 v0.7.5 temporarily opens testing without sign-in or sequence prerequisites. Checks cover no-login practice in all 44 lessons, unrestricted reviews, honest completion, isolated local saving, activity/review reload, browsing during a review, paused building-review resume, storage failures, backup download, keyboard controls and 320–1440px layouts. With testing disabled, the original full sequential course and simulated Google synchronization checks still pass.
 
 Real-account Google authorization is not established by simulated sign-in tests. The earlier first-click sign-in issue still needs verification with a fresh real account.
+
+v0.7.6 adds compact phone/tablet navigation, touch-only movement/removal/insertion controls, larger touch tiles, centered 12px labels, a compact phone word bank and a larger lesson-image view. Hosted HTML is approximately 389 KB instead of 62 MB; initial loading fetches only the current teaching image. `tests/mobile-tablet.browser.cjs` uses Playwright and Chrome to check touch edits and Undo, repeated words, punctuation, draft/review reload, widths from 320 to 1440 pixels, rotation, all 44 image decodes and unchanged image bytes, and the mouse-only desktop menu, keyboard controls and dragging. Set `PLAYWRIGHT_MODULE` or `BROWSER_PATH` if using a bundled runtime rather than locally installed Playwright/Chrome. The app itself has no new dependencies.
 
 ## Contributing
 
