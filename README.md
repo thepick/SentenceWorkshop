@@ -2,7 +2,7 @@
 
 An interactive English grammar course for Grade 5 learners. Students learn parts of speech, build sentences with editable word tiles, and develop their use of six verb tenses through guided practice and reviews.
 
-**[Open Sentence Workshop](https://sentenceworkshop.mtomlinson.ca/)** · [Privacy](https://sentenceworkshop.mtomlinson.ca/privacy.html) · [Current single-file app: v0.7.2](Sentence%20Workshop%20v0.7.2.html)
+**[Open Sentence Workshop](https://sentenceworkshop.mtomlinson.ca/)** · [Privacy](https://sentenceworkshop.mtomlinson.ca/privacy.html) · [Current single-file app: v0.7.3](Sentence%20Workshop%20v0.7.3.html)
 
 ## What students do
 
@@ -28,11 +28,13 @@ The grammar checker runs in the browser. It does not use AI to assess student an
 | Chapter 5 | Simple future | 6 building lessons + 12-question review |
 | Chapter 6 | Future continuous | 6 building lessons + 12-question review |
 
-Building lessons develop from a simple sentence to articles, adjectives, adverbs, time expressions and joined ideas. All 44 teaching illustrations are embedded in the app, with descriptive alt text. A mixed-tense review provides optional continued practice after the building chapters; a shorter review becomes available after studying at least two tenses.
+Building lessons develop from a simple sentence to articles, adjectives, adverbs, time expressions and joined ideas. All 44 teaching illustrations are embedded in the app, with descriptive alt text. A mixed-tense review provides optional continued practice after the building chapters; a shorter review becomes available after passing at least two building chapters.
 
 **Words and their jobs** is subtitled **An introduction to parts of speech**. Its eight teaching images highlight and label only the target word class; other sentence words and punctuation remain plain. The taller pronoun card places an illustrated object-pronoun example below the subject-pronoun section.
 
-The Introduction uses authored sentence contexts, including distinctions such as *her* as a pronoun or determiner and *fast* as an adjective or adverb. Punctuation is taught separately from parts of speech.
+The Introduction uses 26–32 sentence contexts per lesson, including distinctions such as *her* and *fast* in context. Consecutive practice questions use different sentences and focus only on the current word class. Students select its words or answer Yes/No about one outlined word. Checking highlights and labels only that lesson’s target words. Other classes are assessed in their own lessons; the section review covers all eight. Punctuation is taught separately from parts of speech.
+
+Check/Submit buttons are blue. Earned next-question, next-lesson and next-chapter buttons are green. Correct practice answers hide Check; incorrect answers stay on the question for correction. Review answers advance without revealing correctness until the review is finished.
 
 ## Getting started
 
@@ -41,19 +43,19 @@ The Introduction uses authored sentence contexts, including distinctions such as
 3. Study the lesson example, then start practice.
 4. Build readiness through practice, complete the section review, and continue to the next chapter.
 
-New students begin with the Introduction. Returning students retain their previous drafts, attempts, earned progress and accessed chapters; the new Introduction is optional for them.
+Sentence Workshop is in beta testing. Every account follows the same sequence: finish each Introduction lesson, pass the Introduction review, then finish the six lessons and review in each building chapter before starting the next. Earlier earned passes remain valid; old access flags do not bypass prerequisites. Saved answers and earned progress are retained.
 
 The interface adapts to desktop and phone screens. Buttons and keyboard alternatives are available alongside dragging. Automated browser checks use Chrome; native touch dragging and screen-reader behavior have not been fully verified.
 
 ## Progress and reviews
 
-The overall indicator shows **percent complete**, based on earned lesson-readiness milestones and passed reviews. New students have 51 required milestones: 44 lessons and 7 section reviews. Returning students have 42, with the Introduction optional. A passed review credits its lessons even if an older profile lacks practice-readiness history. Access to a chapter alone does not count as completion.
+The overall indicator shows **percent complete**, based on earned lesson-readiness milestones and passed reviews. Every account has 51 required milestones: 44 lessons and 7 section reviews. A passed review credits its lessons even if an older profile lacks practice-readiness history. Access to a chapter alone does not count as completion.
 
 Readiness and earned review passes remain earned after later weaker work. Corrections help students learn but do not replace their first-answer scores.
 
 ### Introduction
 
-- Readiness: 4 correct first answers in a 5-answer window, including successful word-finding and category-naming questions.
+- Readiness: 4 correct first answers in a 5-answer window, including successful word-finding and yes/no word-job questions.
 - Review: 16 questions, two per part of speech.
 - Pass: at least 14/16 correct, with at least one correct answer in every category.
 
@@ -73,7 +75,7 @@ These are classroom pilot readiness rules, not empirically validated mastery thr
 
 Passing all required section reviews brings progress to 100%. Students can revisit lessons and use mixed-tense reviews for continued practice without losing earned completion.
 
-A dedicated congratulations/completion screen is planned. It is not included in v0.7.2; students currently remain on their review results after the final chapter.
+A dedicated congratulations/completion screen is planned. It is not included in v0.7.3; students currently remain on their review results after the final chapter.
 
 ## Saving and privacy
 
@@ -90,7 +92,7 @@ There is no separate application database, advertising or analytics. See the [pr
 The course is a static HTML application with JavaScript, styles and lesson images embedded. Browser and device icons are separate files alongside the app. No package installation, build step or application server is required to preview the course.
 
 - `index.html` is the live entry point.
-- `Sentence Workshop v0.7.2.html` is the matching versioned release.
+- `Sentence Workshop v0.7.3.html` is the matching versioned release.
 - `privacy.html` contains the privacy policy.
 - `favicon.svg` and `favicon.ico` provide scalable and multi-size browser-tab icons.
 - `icons/` contains PNG icons from 16 to 512 pixels, including Apple and maskable variants.
@@ -123,6 +125,8 @@ The embedded checks assess the grammar engine. Release validation also uses loca
 v0.7.1 adds checks for the framed work areas, retained drafts, word editing, dragging, Undo, hidden identification clues, all icon dimensions, same-origin image loading and the manifest. Desktop and phone layouts were checked from 320 to 1440 pixels. The grading and progress logic is unchanged from v0.7.0.
 
 v0.7.2 replaces all eight Introduction images, updates their descriptive alt text, names the chapter Words and their jobs with its subtitle, and gives the practice panels matching thin borders. Browser checks cover all eight image decodes, aspect ratios, narrow-screen layouts, neutral identification, the review and saved-answer resume. Grading, authored questions and progress storage remain unchanged.
+
+v0.7.3 enforces sequential access for every beta account, expands the Introduction practice bank, isolates practice prompts and feedback by word class, and clarifies submission and earned next-step buttons. Checks cover the entire course sequence, fresh contexts, target-only cues, corrections, original scores, practice/review reload, recovery, backups, Google synchronization and Chrome layouts. Previously saved question sources retain their original answers so existing beta progress remains compatible.
 
 Real-account Google authorization is not established by simulated sign-in tests. The earlier first-click sign-in issue still needs verification with a fresh real account.
 
