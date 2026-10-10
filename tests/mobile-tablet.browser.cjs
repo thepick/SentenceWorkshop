@@ -25,6 +25,31 @@ const server=http.createServer((request,response)=>{
       await section.locator('button').nth(lesson).tap();
       assert.equal(await menu.evaluate(x=>x.open),page.viewportSize().width>1000);
     };
+    let releaseImage;
+    const imageHold=new Promise(resolve=>{releaseImage=resolve;});
+    await page.route('**/lesson-images/introduction-verb-*',async route=>{await imageHold;await route.continue().catch(()=>{});});
+    const verbRequest=page.waitForRequest(request=>request.url().includes('/introduction-verb-'));
+    await pick(-1,1);await verbRequest;
+    if(output)await page.screenshot({path:path.join(output,'Image switch while loading.png')});
+    assert.equal(await page.locator('#intro-infographic').evaluate(image=>getComputedStyle(image).visibility),'hidden','The previous Nouns artwork must disappear while Verbs loads');
+    assert(await page.locator('#intro-infographic-status').isVisible());
+    releaseImage();await page.locator('#intro-infographic').evaluate(image=>image.decode());
+    await page.locator('#intro-infographic-status').waitFor({state:'hidden'});
+    assert((await page.locator('#intro-infographic').evaluate(image=>image.currentSrc)).includes('/introduction-verb-'));
+    await page.unroute('**/lesson-images/introduction-verb-*');
+    // Check displayed artwork after real lesson selection, not just standalone image decodes.
+    for(const [index,lesson] of ['noun','verb','pronoun','determiner','adjective','adverb','preposition','conjunction'].entries()){
+      await pick(-1,index);await page.locator('#intro-infographic').evaluate(image=>image.decode());await page.locator('#intro-infographic-status').waitFor({state:'hidden'});
+      const displayed=await page.locator('#intro-infographic').evaluate(image=>({src:image.currentSrc,visibility:getComputedStyle(image).visibility}));
+      assert(displayed.src.includes('/introduction-'+lesson+'-'));assert.equal(displayed.visibility,'visible');
+      await page.locator('#intro-art-open').tap();await page.locator('#art-image').evaluate(image=>image.decode());await page.locator('#art-image-status').waitFor({state:'hidden'});
+      assert.equal(await page.locator('#art-image').evaluate(image=>image.currentSrc),displayed.src);await page.keyboard.press('Escape');
+    }
+    await page.route('**/lesson-images/introduction-verb-*',route=>route.fulfill({status:503,body:'Unavailable'}));
+    await pick(-1,1);await page.waitForFunction(()=>document.querySelector('#intro-infographic-status').textContent.includes('could not load'));
+    assert.equal(await page.locator('#intro-infographic').evaluate(image=>getComputedStyle(image).visibility),'hidden');
+    await page.unroute('**/lesson-images/introduction-verb-*');await pick(-1,1);await page.locator('#intro-infographic').evaluate(image=>image.decode());await page.locator('#intro-infographic-status').waitFor({state:'hidden'});
+    if(output)await page.screenshot({path:path.join(output,'Verbs lesson corrected.png')});
     const tokens=()=>page.evaluate(()=>SENTENCE_WORKSHOP.UI.snapshot().tokens);
     const option=label=>page.locator('#word-options').getByRole('button',{name:label,exact:true});
     const select=async index=>{const tile=page.locator('#workspace button').nth(index);if(await tile.getAttribute('aria-expanded')!=='true')await tile.tap();await page.locator('#word-options').waitFor({state:'visible'});};
@@ -72,7 +97,11 @@ const server=http.createServer((request,response)=>{
     }
     const desktop=await browser.newContext({viewport:{width:1440,height:1000},hasTouch:false}),mouse=await desktop.newPage();mouse.on('pageerror',error=>errors.push(error.message));await mouse.goto(base);const section=mouse.locator('#lessons .chapter').nth(1);await section.locator('summary').click();await section.locator('button').first().click();await mouse.locator('#workspace button').first().click();assert.equal(await mouse.locator('.touch-edit').count(),0);assert(await mouse.getByRole('button',{name:'Toggle capital letter'}).isVisible());assert(await mouse.locator('.touch-help').isHidden());assert(await mouse.locator('.desktop-help').isVisible());
     await mouse.locator('#workspace').focus();await mouse.keyboard.press('Home');await mouse.getByRole('button',{name:/^Add the(?:;|$)/}).first().click();assert.equal((await mouse.evaluate(()=>SENTENCE_WORKSHOP.UI.snapshot().tokens))[0],'the');await mouse.locator('#undo').click();
+    await mouse.locator('#lesson-infographic').evaluate(image=>image.decode());await mouse.locator('#lesson-infographic-status').waitFor({state:'hidden'});
     const mouseTokens=()=>mouse.evaluate(()=>SENTENCE_WORKSHOP.UI.snapshot().tokens),priorDrag=await mouseTokens(),target=mouse.locator('#workspace button').nth(1),box=await target.boundingBox();await mouse.locator('#workspace button').first().dragTo(target,{targetPosition:{x:box.width-4,y:box.height/2}});assert.deepEqual(await mouseTokens(),[priorDrag[1],priorDrag[0]]);await mouse.locator('#undo').click();assert.deepEqual(await mouseTokens(),priorDrag);
-    assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,widths:results,hostedBytes:Buffer.byteLength(appSource),offlineBytes:Buffer.byteLength(offlineSource),initialImageRequests:1,checks:'Touch movement/removal/insertion/Undo, duplicates, punctuation, draft/review reload, centered labels and targets, navigation rotation, art viewer, all 44 image bytes/decodes, desktop menu/keyboard/drag'}));
+    const offline=await context.newPage();offline.on('pageerror',error=>errors.push(error.message));await offline.goto(require('node:url').pathToFileURL(path.join(root,'Sentence Workshop v0.7.6.html')).href);
+    await offline.locator('#intro-infographic').evaluate(image=>image.decode());await offline.locator('#intro-infographic-status').waitFor({state:'hidden'});await offline.locator('#lesson-menu > summary').tap();await offline.getByRole('button',{name:/^I\.2 Verbs:/}).tap();
+    await offline.locator('#intro-infographic').evaluate(image=>image.decode());await offline.locator('#intro-infographic-status').waitFor({state:'hidden'});assert(await offline.locator('#intro-infographic').evaluate(image=>image.currentSrc===SENTENCE_WORKSHOP.INTRO_INFOGRAPHICS.verb.src&&getComputedStyle(image).visibility==='visible'),'Offline Verbs artwork loads correctly');
+    assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,widths:results,hostedBytes:Buffer.byteLength(appSource),offlineBytes:Buffer.byteLength(offlineSource),initialImageRequests:1,checks:'Delayed lesson image switch, all eight Introduction lesson/larger-view images, failed-image retry; touch movement/removal/insertion/Undo, duplicates, punctuation, draft/review reload, centered labels and targets, navigation rotation, art viewer, all 44 image bytes/decodes, desktop menu/keyboard/drag'}));
   }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);server.close();process.exitCode=1;});

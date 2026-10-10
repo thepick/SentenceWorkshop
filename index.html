@@ -49,6 +49,7 @@ button.advance{background:#246b4b;border-color:#246b4b;color:#fff;font-weight:65
 @media(max-width:1000px){.lesson-menu>summary{min-height:44px;display:flex;align-items:center;font-size:16px}.lesson-menu>summary::before{content:'▸';margin-right:8px}.lesson-menu[open]>summary::before{content:'▾'}.lesson-nav{padding:8px 12px}.touch-art{display:inline-flex;margin:0 0 8px}}
 @media(any-pointer:coarse){.desktop-help,.keyboard-help{display:none}.touch-help{display:inline}.touch-art{display:inline-flex;margin:0 0 8px}.workspace button,.word-list button,.punctuation button,.workspace button.punctuation-tile{min-width:44px;min-height:44px;height:44px;cursor:pointer}.workspace button.punctuation-tile{flex-basis:44px;width:44px}#intro-practice .actions{position:sticky;bottom:0;background:#edf5fb}}
 @media(max-width:600px){.student-work-area,#intro-practice{padding:12px 10px}.student-work-area .workspace{padding:10px}.bank-group{display:block}.bank-group h4{margin:0 0 5px}.word-list{gap:12px}.choice-trays{grid-template-columns:minmax(0,1fr) auto;gap:10px}.punctuation-box{padding:8px}.punctuation{flex-direction:column;gap:8px}.word-box{padding:10px}.choice-tray h3{font-size:14px}.student-work-area #building-help{font-size:14px}.actions .spacer{display:none}.actions #skip-pair{margin-left:auto}}
+.lesson-card,.art-scroll{position:relative}.lesson-image-status{position:absolute;left:0;right:0;margin:8px 0;z-index:1}
 </style><meta name="theme-color" content="#245d89">
 <meta name="apple-mobile-web-app-title" content="Sentence Workshop">
 <link rel="icon" href="favicon.ico" sizes="16x16 24x24 32x32 48x48 64x64 128x128 256x256">
@@ -71,7 +72,7 @@ button.advance{background:#246b4b;border-color:#246b4b;color:#fff;font-weight:65
   <h2 id="intro-title" tabindex="-1">Nouns</h2>
   <details id="intro-lesson-card" class="lesson-card" open>
     <summary>Lesson &amp; example</summary>
-    <img id="intro-infographic" class="lesson-infographic" loading="lazy" alt=""><button id="intro-art-open" class="touch-art quiet" type="button">View larger</button>
+    <p id="intro-infographic-status" class="hint lesson-image-status" role="status" hidden></p><img id="intro-infographic" class="lesson-infographic" loading="lazy" alt=""><button id="intro-art-open" class="touch-art quiet" type="button">View larger</button>
     <p id="intro-rule" class="visually-hidden"></p><p id="intro-tip" class="hint"></p>
   </details>
   <div id="intro-learning-actions"><p class="hint">Study the example. Then find this lesson’s words without colors or labels.</p><button id="intro-start" class="advance" disabled>Start practice</button></div>
@@ -85,7 +86,7 @@ button.advance{background:#246b4b;border-color:#246b4b;color:#fff;font-weight:65
   <details id="intro-progress" class="course-progress"><summary>Lesson progress</summary><p id="intro-progress-text" class="hint"></p></details>
 </section>
 
-<section id="sentence-card" class="card"><div class="instruction"><div class="activity-heading"><details id="lesson-card" class="lesson-card"><summary>Lesson &amp; example</summary><img id="lesson-infographic" class="lesson-infographic" loading="lazy" alt="" hidden><button id="lesson-art-open" class="touch-art quiet" type="button" hidden>View larger</button><div id="lesson-text"><h3 id="lesson-title"></h3><p id="tense-rule"></p><p id="lesson-position"></p><p class="lesson-label">Pattern</p><p id="lesson-pattern" class="lesson-pattern"></p><p class="lesson-label">Example</p><p id="lesson-example" class="lesson-example"></p></div></details><div class="eyebrow" id="pair-number">1.1 · Build 1</div><h2 id="challenge-title" tabindex="-1">Make a short sentence</h2></div><p id="task-requirements" class="task-requirements" aria-label="Sentence requirements"></p></div>
+<section id="sentence-card" class="card"><div class="instruction"><div class="activity-heading"><details id="lesson-card" class="lesson-card"><summary>Lesson &amp; example</summary><p id="lesson-infographic-status" class="hint lesson-image-status" role="status" hidden></p><img id="lesson-infographic" class="lesson-infographic" loading="lazy" alt="" hidden><button id="lesson-art-open" class="touch-art quiet" type="button" hidden>View larger</button><div id="lesson-text"><h3 id="lesson-title"></h3><p id="tense-rule"></p><p id="lesson-position"></p><p class="lesson-label">Pattern</p><p id="lesson-pattern" class="lesson-pattern"></p><p class="lesson-label">Example</p><p id="lesson-example" class="lesson-example"></p></div></details><div class="eyebrow" id="pair-number">1.1 · Build 1</div><h2 id="challenge-title" tabindex="-1">Make a short sentence</h2></div><p id="task-requirements" class="task-requirements" aria-label="Sentence requirements"></p></div>
 <div id="challenge-support"><p id="meaning-cue" class="meaning-cue" hidden></p><div id="framework-area" class="framework" aria-label="Idea requirements"></div></div>
 <div id="recovery-notice" class="recovery-notice" hidden></div>
 <section id="course-complete" class="course-complete" aria-labelledby="challenge-title" hidden>
@@ -99,7 +100,7 @@ button.advance{background:#246b4b;border-color:#246b4b;color:#fff;font-weight:65
 <div class="choice-trays"><section class="choice-tray" aria-labelledby="words-heading"><h3 id="words-heading">Words</h3><div id="word-box" class="word-box"><p id="return-hint" class="hint" hidden>Drop here to return a tile.</p><div id="word-bank" class="word-list" role="group" aria-label="Words to use"></div></div>
 </section><section class="choice-tray" aria-labelledby="punctuation-heading"><h3 id="punctuation-heading">Punctuation</h3><div id="punctuation-box" class="punctuation-box"><div class="punctuation"><button id="comma" aria-label="Add a comma">,</button><button id="period" aria-label="Add a period">.</button></div></div></section></div>
 <div class="actions"><button id="student-check" class="primary" disabled>Check</button><button id="continue" class="advance" hidden>Next sentence</button><button id="next-lesson" class="advance" hidden>Next lesson</button><button id="undo" class="quiet" disabled>Undo</button><button id="clear" class="quiet" disabled>Clear</button><span class="spacer"></span><button id="skip-pair" class="quiet">Skip</button></div></div><button id="next-chapter" class="advance" hidden>Next chapter</button><details id="course-progress" class="course-progress" aria-label="Practice readiness"><summary id="progress-summary">Progress</summary><div id="progress-details" class="progress-details"></div></details></section></div>
-<p class="hint"><a href="privacy.html">Privacy and saved progress</a></p></main><dialog id="art-dialog" aria-labelledby="art-title"><div class="art-toolbar"><h2 id="art-title">Lesson example</h2><form method="dialog"><button>Close</button></form></div><div class="art-scroll"><img id="art-image" alt=""><p id="art-description"></p></div></dialog><script>/* DATA — the reviewed vocabulary and finite phrase grammar. */
+<p class="hint"><a href="privacy.html">Privacy and saved progress</a></p></main><dialog id="art-dialog" aria-labelledby="art-title"><div class="art-toolbar"><h2 id="art-title">Lesson example</h2><form method="dialog"><button>Close</button></form></div><div class="art-scroll"><p id="art-image-status" class="hint lesson-image-status" role="status" hidden></p><img id="art-image" alt=""><p id="art-description"></p></div></dialog><script>/* DATA — the reviewed vocabulary and finite phrase grammar. */
 const VERSION = '0.7.6';
 // Temporary beta access. Set false to restore Google sign-in and all sequence locks.
 const TESTING_MODE = true;
@@ -4803,6 +4804,21 @@ const UI = (() => {
       container.append(tile);
     });
   }
+  function setLessonImage(id,poster){
+    const image=get(id),status=get(id+'-status');
+    if(image.getAttribute('src')===poster.src&&(!image.complete||image.naturalWidth))return;
+    // Browsers can keep painting the previous lesson while the new source downloads.
+    image.style.visibility='hidden';image.style.aspectRatio=poster.width+'/'+poster.height;image.setAttribute('aria-busy','true');status.hidden=false;status.textContent='Loading lesson image…';
+    image.onload=()=>{
+      if(!image.complete||!image.naturalWidth||image.currentSrc!==image.src)return;
+      image.style.visibility='';image.setAttribute('aria-busy','false');status.hidden=true;
+    };
+    image.onerror=()=>{
+      if(!image.complete)return;
+      image.setAttribute('aria-busy','false');status.textContent='The lesson image could not load. Choose this lesson again to retry.';
+    };
+    image.alt=poster.alt;image.width=poster.width;image.height=poster.height;image.src=poster.src;
+  }
   function renderIntro(){
     const v=introView(),p=INTRODUCTION.progress(student),finished=v.review?.finished;
     const lesson=INTRODUCTION.lessons.find(l=>l.id===v.source.lesson),q=INTRODUCTION.question(v.source,Boolean(v.review));
@@ -4812,7 +4828,7 @@ const UI = (() => {
     get('intro-lesson-card').hidden=!v.learning||Boolean(v.review);get('intro-learning-actions').hidden=!v.learning;
     get('intro-practice').hidden=v.learning||Boolean(finished);get('intro-progress').hidden=Boolean(v.review)||v.learning;
     if(v.learning){
-      const poster=INTRO_INFOGRAPHICS[lesson.id],image=get('intro-infographic');image.src=poster.src;image.alt=poster.alt;image.width=poster.width;image.height=poster.height;
+      setLessonImage('intro-infographic',INTRO_INFOGRAPHICS[lesson.id]);
       get('intro-lesson-card').open=true;get('intro-rule').textContent=lesson.rule;get('intro-tip').textContent=lesson.tip;
       get('intro-start').disabled=!canUse();
     }
@@ -5265,7 +5281,7 @@ const UI = (() => {
     const patterns={simple:`Who → ${verb}`,details:`Who → ${verb} → object or place`,adjectives:`Described subject → ${verb} → object or place`,adverbs:`Described subject → ${verb} → ${c.framework.object?'object → how':c.framework.prep===null?'place → how':'how → place'}`,time:c.arrangement==='B'?`Time + comma → described subject → ${verb} → details`:`Described subject → ${verb} → details → time`,joining:c.joinPosition==='beginning'?`${c.join} + reason + comma → main part`:`Main part → ${['so','and','but'].includes(c.join)?'comma + ':''}${c.join} → second part`};
     const poster=LESSON_INFOGRAPHICS[activeTense]?.[stage]||null,key=activeTense+':'+stage;
     get('lesson-art-open').hidden=!poster;get('lesson-infographic').hidden=!poster;get('lesson-text').hidden=Boolean(poster);
-    if(poster){const image=get('lesson-infographic');image.src=poster.src;image.width=poster.width;image.height=poster.height;image.alt=poster.alt;}
+    if(poster)setLessonImage('lesson-infographic',poster);get('lesson-infographic-status').hidden=!poster||get('lesson-infographic').style.visibility!=='hidden';
     if(key!==lessonKey){get('lesson-card').open=Boolean(poster);lessonKey=key;}
     get('lesson-title').textContent=DATA.lessons.find(x=>x.id===stage).title;
     get('tense-rule').textContent=chapter.rule;
@@ -5402,7 +5418,7 @@ const UI = (() => {
     if(compactLayout){get('lesson-menu').open=!compactLayout.matches;compactLayout.addEventListener('change',()=>{get('lesson-menu').open=!compactLayout.matches;renderLessons();});}
     touchInput?.addEventListener('change',closeWordMenu);
     globalThis.visualViewport?.addEventListener('resize',closeWordMenu);
-    for(const [button,imageId] of [['intro-art-open','intro-infographic'],['lesson-art-open','lesson-infographic']])get(button).addEventListener('click',()=>{const source=get(imageId);get('art-image').src=source.src;get('art-image').alt=source.alt;get('art-description').textContent=source.alt;get('art-dialog').showModal();});
+    for(const [button,imageId] of [['intro-art-open','intro-infographic'],['lesson-art-open','lesson-infographic']])get(button).addEventListener('click',()=>{const source=get(imageId);setLessonImage('art-image',{src:source.src,alt:source.alt,width:source.getAttribute('width'),height:source.getAttribute('height')});get('art-description').textContent=source.alt;get('art-dialog').showModal();});
     initIntro();accountMenu();
     if(!TESTING_MODE)GOOGLE_SYNC.init({
       status:googleStatus,
