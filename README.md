@@ -2,12 +2,13 @@
 
 An interactive English grammar course for Grade 5 learners. Students learn parts of speech, build sentences with editable word tiles, and develop their use of six verb tenses through guided practice and reviews.
 
-**[Open Sentence Workshop](https://sentenceworkshop.mtomlinson.ca/)** · [Privacy](https://sentenceworkshop.mtomlinson.ca/privacy.html) · [Current single-file app: v0.7.0](Sentence%20Workshop%20v0.7.0.html)
+**[Open Sentence Workshop](https://sentenceworkshop.mtomlinson.ca/)** · [Privacy](https://sentenceworkshop.mtomlinson.ca/privacy.html) · [Current single-file app: v0.7.1](Sentence%20Workshop%20v0.7.1.html)
 
 ## What students do
 
 - Study illustrated examples with the app's consistent parts-of-speech colors.
 - Identify words by their job in a sentence. Identification hides teaching artwork, category colors and labels until practice is checked.
+- Work in a clearly outlined blue practice panel, with a white area for sentence tiles.
 - Build sentences by selecting or dragging words, changing word forms, adding descriptions, and supplying capitalization and punctuation.
 - Get rule-based feedback and make corrections during practice.
 - Complete reviews with first-answer scores and feedback revealed at the end.
@@ -70,7 +71,7 @@ These are classroom pilot readiness rules, not empirically validated mastery thr
 
 Passing all required section reviews brings progress to 100%. Students can revisit lessons and use mixed-tense reviews for continued practice without losing earned completion.
 
-A dedicated congratulations/completion screen is planned. It is not included in v0.7.0; students currently remain on their review results after the final chapter.
+A dedicated congratulations/completion screen is planned. It is not included in v0.7.1; students currently remain on their review results after the final chapter.
 
 ## Saving and privacy
 
@@ -84,17 +85,27 @@ There is no separate application database, advertising or analytics. See the [pr
 
 ## Running and maintaining the app
 
-This is a static, single-file HTML application with JavaScript, styles and lesson images embedded. No package installation, build step or application server is required to preview it.
+The course is a static HTML application with JavaScript, styles and lesson images embedded. Browser and device icons are separate files alongside the app. No package installation, build step or application server is required to preview the course.
 
 - `index.html` is the live entry point.
-- `Sentence Workshop v0.7.0.html` is the matching versioned release.
+- `Sentence Workshop v0.7.1.html` is the matching versioned release.
 - `privacy.html` contains the privacy policy.
+- `favicon.svg` and `favicon.ico` provide scalable and multi-size browser-tab icons.
+- `icons/` contains PNG icons from 16 to 512 pixels, including Apple and maskable variants.
+- `apple-touch-icon.png` provides the 180-pixel Apple home-screen icon.
+- `site.webmanifest` declares 192- and 512-pixel launch icons and the app name and colors.
 - `CNAME` configures the custom domain for GitHub Pages.
 - Older versioned HTML files are retained for reference and rollback.
 
-Download and open the current HTML file to preview lessons. Google sign-in from a downloaded file opens the hosted website. Saved-course sign-in requires an approved web origin in the existing Google OAuth configuration and the Google Drive API enabled for that project.
+Download and open the current HTML file to preview lessons. Keep the icon files and manifest beside it, in their existing folders, when hosting your own copy. Google sign-in from a downloaded file opens the hosted website. Saved-course sign-in requires an approved web origin in the existing Google OAuth configuration and the Google Drive API enabled for that project.
 
 GitHub Pages publishes the root of the `main` branch. Keep `index.html` and the current versioned release identical when making an app update. Preserve the existing account-storage keys and validate compatibility before changing progress data. Student backups, account caches and credentials do not belong in this public repository.
+
+### Browser and device icons
+
+The icons use the same sentence-tile artwork as the header. The favicon has transparent corners; Apple and maskable launch icons have an opaque blue background and padding to protect the artwork when a device crops it. Apple icon sizes are 152, 167 and 180 pixels. The ICO contains 16-, 24-, 32-, 48-, 64-, 128- and 256-pixel frames.
+
+A browser or device may offer **Add to Home Screen** or an app shortcut. Availability and installation behavior depend on that platform. The manifest does not provide offline caching; saved-course sign-in and Google synchronization require a connection. Actual iOS and Android home-screen installation has not been tested. See the [web app manifest documentation](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest) and [Apple web-content guidance](https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html).
 
 ### Built-in grammar checks
 
@@ -106,6 +117,8 @@ console.log({ passed: report.passed, checks: report.total, failures: report.fail
 ```
 
 The embedded checks assess the grammar engine. Release validation also uses local interaction, progress, simulated Google synchronization and Chrome layout checks. Those local development suites are not shipped in this repository. v0.7.0 checks covered Introduction identification, percentage progress, preservation of existing work, review resume, recovery, conflicting saves, all teaching-image decodes and layouts from 320 to 1440 pixels.
+
+v0.7.1 adds checks for the framed work areas, retained drafts, word editing, dragging, Undo, hidden identification clues, all icon dimensions, same-origin image loading and the manifest. Desktop and phone layouts were checked from 320 to 1440 pixels. The grading and progress logic is unchanged from v0.7.0.
 
 Real-account Google authorization is not established by simulated sign-in tests. The earlier first-click sign-in issue still needs verification with a fresh real account.
 
