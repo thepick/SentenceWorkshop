@@ -2,7 +2,7 @@
 
 An interactive English grammar course for Grade 5 learners. Students learn parts of speech, build sentences with editable word tiles, and develop their use of six verb tenses through guided practice and reviews.
 
-**[Open Sentence Workshop](https://sentenceworkshop.mtomlinson.ca/)** · [Privacy](https://sentenceworkshop.mtomlinson.ca/privacy.html) · [Current single-file app: v0.7.3](Sentence%20Workshop%20v0.7.3.html)
+**[Open Sentence Workshop](https://sentenceworkshop.mtomlinson.ca/)** · [Privacy](https://sentenceworkshop.mtomlinson.ca/privacy.html) · [Current single-file app: v0.7.4](Sentence%20Workshop%20v0.7.4.html)
 
 ## What students do
 
@@ -75,7 +75,7 @@ These are classroom pilot readiness rules, not empirically validated mastery thr
 
 Passing all required section reviews brings progress to 100%. Students can revisit lessons and use mixed-tense reviews for continued practice without losing earned completion.
 
-A dedicated congratulations/completion screen is planned. It is not included in v0.7.3; students currently remain on their review results after the final chapter.
+After the final required review brings the course to 100%, a congratulations screen celebrates completion. **Keep practicing** opens a mixed-tense review; **Revisit lessons** opens Chapter 1 and focuses its lesson menu so students can choose any completed lesson. The final review results remain available in an expandable section below. Reloading the completed final review restores the congratulations screen. Optional practice and weaker retries do not remove earned completion.
 
 ## Saving and privacy
 
@@ -92,7 +92,7 @@ There is no separate application database, advertising or analytics. See the [pr
 The course is a static HTML application with JavaScript, styles and lesson images embedded. Browser and device icons are separate files alongside the app. No package installation, build step or application server is required to preview the course.
 
 - `index.html` is the live entry point.
-- `Sentence Workshop v0.7.3.html` is the matching versioned release.
+- `Sentence Workshop v0.7.4.html` is the matching versioned release.
 - `privacy.html` contains the privacy policy.
 - `favicon.svg` and `favicon.ico` provide scalable and multi-size browser-tab icons.
 - `icons/` contains PNG icons from 16 to 512 pixels, including Apple and maskable variants.
@@ -127,6 +127,8 @@ v0.7.1 adds checks for the framed work areas, retained drafts, word editing, dra
 v0.7.2 replaces all eight Introduction images, updates their descriptive alt text, names the chapter Words and their jobs with its subtitle, and gives the practice panels matching thin borders. Browser checks cover all eight image decodes, aspect ratios, narrow-screen layouts, neutral identification, the review and saved-answer resume. Grading, authored questions and progress storage remain unchanged.
 
 v0.7.3 enforces sequential access for every beta account, expands the Introduction practice bank, isolates practice prompts and feedback by word class, and clarifies submission and earned next-step buttons. Checks cover the entire course sequence, fresh contexts, target-only cues, corrections, original scores, practice/review reload, recovery, backups, Google synchronization and Chrome layouts. Previously saved question sources retain their original answers so existing beta progress remains compatible.
+
+v0.7.4 adds the congratulations screen and its practice/revisit options. Completion checks cover a genuine final-review pass, incomplete and unsuccessful reviews, restoration after reload, both actions, optional-review resume, retained 100% completion, final-answer access and desktop/phone layouts. Grading, readiness rules and saved progress formats are unchanged.
 
 Real-account Google authorization is not established by simulated sign-in tests. The earlier first-click sign-in issue still needs verification with a fresh real account.
 
