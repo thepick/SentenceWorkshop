@@ -53,6 +53,8 @@ The interface adapts to desktop, tablet and phone screens. At widths up to 1000 
 
 Narrow screens place category headings above the word choices and punctuation beside the bank. View larger opens a scrollable lesson image with its text description; Close or Escape returns to the lesson. Automated browser checks use Chrome with touch emulation; physical-device gestures and screen-reader behavior have not been fully verified.
 
+When a lesson image changes, the previous artwork is hidden immediately and a loading message appears until the selected image is ready. Failed downloads show a retry message; choosing that lesson again retries the image. The same behavior applies to Introduction lessons, building lessons and View larger. Browser checks cover the Nouns-to-Verbs transition with a delayed download, all eight Introduction images after navigation, larger views, and failed-download recovery.
+
 ## Progress and reviews
 
 The overall indicator shows **percent complete**, based on earned lesson-readiness milestones and passed reviews. Every account has 51 required milestones: 44 lessons and 7 section reviews. A passed review credits its lessons even if an older profile lacks practice-readiness history. Access to a chapter alone does not count as completion.
