@@ -13,6 +13,8 @@ Live receiver: https://script.google.com/macros/s/AKfycbwaE60NToAIbrtCKRnPeBphWv
 
 The project contains `classroom-receiver.gs`. Deploy as a web app, executing as the reporting account, with access set to Anyone. This allows the student app to submit summaries without giving students access to the Sheets. Google authorization is required for the receiver to edit spreadsheets. The code opens only the two spreadsheet IDs in `CLASS_SHEETS`; there is no fallback destination or endpoint that returns student records.
 
+The main app script carries `data-cfasync="false"`, following [Cloudflare’s script exclusion guidance](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/ignore-javascripts/). Preserve it when rebuilding: Rocket Loader otherwise rewrites the inline script into a deferred type, while the app’s strict security policy blocks the injected loader and prevents startup.
+
 The receiver is deployed as version 1. For a future replacement deployment, set the `CLASSROOM_REPORT` endpoint in `Sentence Workshop v0.7.6.html`, rebuild `index.html` with `node scripts/build-hosted.cjs "Sentence Workshop v0.7.6.html"`, and publish the site. To update the receiver later, edit the same project and update the existing deployment to a new version, preserving its URL.
 
 ## Reporting behavior

@@ -40,7 +40,8 @@ function checkSequence(app){
 for(const file of ['index.html','Sentence Workshop v0.7.6.html']){
   const html=fs.readFileSync(path.join(root,file),'utf8').replace(/data:image\/webp;base64,[A-Za-z0-9+/=]+/g,'data:image/webp;base64,fixture');
   const context=vm.createContext({console});
-  vm.runInContext(html.match(/<script>([\s\S]*?)<\/script>/)[1],context,{filename:file});
+  assert(html.includes('<script data-cfasync="false">'),'Cloudflare must not defer the app behind a script blocked by its security policy');
+  vm.runInContext(html.match(/<script\b[^>]*>([\s\S]*?)<\/script>/)[1],context,{filename:file});
   checkSequence(context.SENTENCE_WORKSHOP);
 }
 console.log('standard-access: both editions require sign-in, Introduction completion, ordered lessons and passed chapter reviews; legacy access cannot bypass gates.');

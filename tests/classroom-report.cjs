@@ -41,7 +41,7 @@ function checkReceiver(){
 function client(classKey='IP5/8',testing=false){
   const timers=new Map(),storage=new Map(),calls=[],box={};let sequence=0,fail=false,hold=null;
   const context=vm.createContext({console,URLSearchParams,AbortController,location:{search:classKey?'?t='+encodeURIComponent(classKey):''},crypto:require('node:crypto').webcrypto,TESTING_MODE:testing,document:{getElementById:()=>box},localStorage:{getItem:k=>storage.get(k),setItem:(k,v)=>storage.set(k,v),removeItem:k=>storage.delete(k)},setTimeout:fn=>{timers.set(++sequence,fn);return sequence;},clearTimeout:id=>timers.delete(id),fetch:async(url,options)=>{calls.push({url,options});if(hold)await hold;if(fail)throw Error('Offline');const p=new URL(url),id=p.searchParams.get('id');return {json:async()=>({ok:true,receiver:'sentenceworkshop-progress-v1',spreadsheetId:p.searchParams.get('spreadsheetId'),...(id?{id,saved:true}:{})})};}});
-  const source=fs.readFileSync(path.join(root,'index.html'),'utf8').match(/<script>([\s\S]*?)<\/script>/)[1];
+  const source=fs.readFileSync(path.join(root,'index.html'),'utf8').match(/<script\b[^>]*>([\s\S]*?)<\/script>/)[1];
   // Load the shipped app without booting its DOM UI.
   vm.runInContext(source.replace("if(typeof document!=='undefined')UI.init();",'').replace('RECEIVER_URL_PENDING','https://script.google.com/macros/s/fixture/exec').replace('const TESTING_MODE = false;',`const TESTING_MODE = ${testing};`),context);
   const {CLASSROOM_REPORT:R,PROGRESS:P}=context.SENTENCE_WORKSHOP;
