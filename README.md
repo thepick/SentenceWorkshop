@@ -4,7 +4,7 @@ An interactive English grammar course for Grade 5 learners. Students learn parts
 
 **[Open Sentence Workshop](https://sentenceworkshop.mtomlinson.ca/)** · [Privacy](https://sentenceworkshop.mtomlinson.ca/privacy.html) · [Current single-file app: v0.7.6](Sentence%20Workshop%20v0.7.6.html)
 
-**Temporary open testing mode:** Google sign-in is suspended. All Introduction and chapter lessons, activities, chapter reviews and the mixed-tense review are available immediately. Work is saved in this browser; it does not synchronize across devices. Scores and earned completion still reflect submitted work.
+**Google sign-in and sequential progression are enabled.** Students complete Words and their jobs and its review, then work through Chapters 1–6 in order. Each chapter’s lessons and passing review unlock the next chapter. Progress is saved to the student’s Google account.
 
 ## What students do
 
@@ -14,7 +14,7 @@ An interactive English grammar course for Grade 5 learners. Students learn parts
 - Build sentences by selecting or dragging words, changing word forms, adding descriptions, and supplying capitalization and punctuation.
 - Get rule-based feedback and make corrections during practice.
 - Complete reviews with first-answer scores and feedback revealed at the end.
-- Resume local testing progress after reloading, and download a progress backup. Google saving across devices remains available in the retained standard mode.
+- Resume saved progress after signing in with Google, continue on another device, and download a progress backup.
 
 The grammar checker runs in the browser. It does not use AI to assess student answers.
 
@@ -41,13 +41,11 @@ Check/Submit buttons are blue. Earned next-question, next-lesson and next-chapte
 ## Getting started
 
 1. Open the [live website](https://sentenceworkshop.mtomlinson.ca/) in a modern browser.
-2. Choose any lesson or chapter; no sign-in is needed during open testing.
-3. Study the lesson example, then start practice.
-4. Try its practice or review, then choose another activity whenever you like.
+2. Sign in with your Google account.
+3. Start Words and their jobs, study the lesson example, then practice.
+4. Complete each lesson and pass its section review to unlock the next section.
 
-Sentence Workshop is in beta testing. Access restrictions are temporarily bypassed, including navigation during reviews. A building review can be paused by choosing another lesson and resumed from its chapter menu; current activities and reviews resume after reload. Switching away from an Introduction review keeps submitted answers in its history; selecting that review again starts a fresh review. Browsing never grants completion automatically.
-
-In standard mode, every account follows the same sequence: finish each Introduction lesson, pass its review, then finish the six lessons and review in each building chapter before starting the next. These rules and Google sign-in are retained for reinstatement. Earlier earned passes remain valid; old access flags do not bypass prerequisites.
+Every account follows the same sequence: finish each Introduction lesson, pass its review, then finish the six lessons and pass the review in each building chapter before starting the next. Lesson navigation is locked during an unfinished review. Current activities and reviews resume after signing in again. Earlier earned passes remain valid; old access flags do not bypass prerequisites.
 
 The interface adapts to desktop, tablet and phone screens. At widths up to 1000 pixels, Lessons becomes a collapsed picker and closes after an activity is selected. Wider screens retain the sidebar. Touch devices have larger word and punctuation tiles; tapping a sentence tile opens Move left, Move right, Insert before and Remove alongside its word forms. These extra buttons are absent on mouse-only desktops. Touchscreen computers also receive the touch controls. All edits support Undo and retain the existing saved-draft behavior. Parts-of-speech labels remain centered beneath their tiles at a readable 12 pixels.
 
@@ -73,7 +71,7 @@ Readiness and earned review passes remain earned after later weaker work. Correc
 - Review: 12 questions, two per lesson.
 - Pass: grammar on at least 10/12, verb forms/agreement on 11/12, capitalization and punctuation on 10/12 each, with grammar success in every lesson and the required coverage.
 
-Reviews hide teaching examples and correctness feedback while active. Standard mode also locks lesson navigation until completion; open testing keeps the lesson menu available. Reloading resumes the current unfinished review. In building reviews, skipped or checker-unscored questions receive fresh replacement questions while preserving scored answers and the original history.
+Reviews hide teaching examples and correctness feedback while active, and lock lesson navigation until completion. Reloading resumes the current unfinished review. In building reviews, skipped or checker-unscored questions receive fresh replacement questions while preserving scored answers and the original history.
 
 An unsuccessful review recommends focused practice. Fresh first answers establish recovery readiness before a fresh retry. Retries are unlimited; after repeated unsuccessful reviews, the app suggests working with a teacher.
 
@@ -87,9 +85,9 @@ After the final required review brings the course to 100%, a congratulations scr
 
 ## Saving and privacy
 
-Open testing stores one testing profile in this browser, under `sentence-workshop-testing-v1`. It is separate from existing Google account caches and older local profiles, which remain untouched. Google sign-in and synchronization are suspended, and testing progress is never automatically uploaded. Clearing browser data removes local testing progress; use **Progress backup → Save backup** first. Backup import is available only in standard mode.
+The former browser-only testing profile remains under `sentence-workshop-testing-v1`. It is not automatically selected or uploaded to Google. Existing Google progress and account-specific caches are retained.
 
-In standard mode, Google sign-in is required for the saved course. Progress is synchronized to this app's hidden application-data folder in the student's Google Drive and cached separately per account in the browser. The app requests application-data access, not general access to ordinary Drive documents. Google access tokens remain in memory rather than being saved in browser storage or backups.
+Google sign-in is required for the saved course. Progress is synchronized to this app's hidden application-data folder in the student's Google Drive and cached separately per account in the browser. The app requests application-data access, not general access to ordinary Drive documents. Google access tokens remain in memory rather than being saved in browser storage or backups.
 
 Saved information includes the current activity, sentence and identification attempts, original answers, scores, corrections, readiness, review history and course access. The signed-in student can export a progress backup and explicitly import their own compatible single-student backup. Class backups are not uploaded to one student's account.
 
@@ -113,11 +111,11 @@ The course is a static HTML application with JavaScript and styles embedded. The
 - `CNAME` configures the custom domain for GitHub Pages.
 - Older versioned HTML files are retained for reference and rollback.
 
-Download and open the current HTML file to try activities. Keep the icon files and manifest beside it, in their existing folders, when hosting your own copy. In standard mode, Google sign-in from a downloaded file opens the hosted website. Saved-course sign-in requires an approved web origin in the existing Google OAuth configuration and the Google Drive API enabled for that project.
+Download and open the current HTML file to try activities. Keep the icon files and manifest beside it, in their existing folders, when hosting your own copy. Google sign-in from a downloaded file opens the hosted website. Saved-course sign-in requires an approved web origin in the existing Google OAuth configuration and the Google Drive API enabled for that project.
 
-### Restore standard access when testing ends
+### Access mode
 
-Set the top-level `const TESTING_MODE = true;` to `false` in the current self-contained release, regenerate the hosted app, then publish both. This single switch restores Google sign-in, sequential Introduction lessons and chapters, review prerequisites, and the review navigation lock. It has no URL or student-facing override. Existing Google data is retained; browser-only testing work is not automatically selected or uploaded in standard mode. Update this README and the privacy page to describe the active mode when switching back.
+The current release uses `const TESTING_MODE = false;`. This enables Google sign-in, sequential Introduction lessons and chapters, review prerequisites, and the review navigation lock. There is no URL or student-facing override. Existing Google data is retained; browser-only testing work is not automatically selected or uploaded. The mobile/tablet suite enables open testing only in its private browser fixtures so it can inspect every lesson; `tests/standard-access.cjs` checks that both shipped editions retain the required sign-in and sequence gates.
 
 GitHub Pages publishes the root of the `main` branch. Edit the current self-contained release, then regenerate the hosted copy with Node.js (no build dependencies):
 

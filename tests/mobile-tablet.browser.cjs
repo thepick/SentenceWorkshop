@@ -1,11 +1,13 @@
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),http=require('node:http');
 const root=path.resolve(__dirname,'..'),output=process.env.SCREENSHOT_DIR,key='sentence-workshop-testing-v1';
+// Open every lesson only in private fixtures; shipped pages keep their sign-in and sequence gates.
+const testingHtml=file=>fs.readFileSync(file,'utf8').replace('const TESTING_MODE = false;','const TESTING_MODE = true;');
 const server=http.createServer((request,response)=>{
   const file=path.resolve(root,'.'+decodeURIComponent(new URL(request.url,'http://localhost').pathname).replace(/\/$/,'/index.html'));
   if(!file.startsWith(root+path.sep)||!fs.existsSync(file)){response.writeHead(404).end();return;}
   response.setHeader('Content-Type',{'.html':'text/html','.webp':'image/webp','.png':'image/png','.svg':'image/svg+xml','.webmanifest':'application/manifest+json','.ico':'image/x-icon'}[path.extname(file)]||'application/octet-stream');
-  response.end(fs.readFileSync(file));
+  response.end(path.extname(file)==='.html'?testingHtml(file):fs.readFileSync(file));
 });
 
 async function checkIntroductionArtwork(page,pick){
@@ -107,7 +109,8 @@ async function checkDesktopEditing(browser,base,errors){
 }
 
 async function checkOfflineArtwork(context,errors){
-  const offline=await context.newPage();offline.on('pageerror',error=>errors.push(error.message));await offline.goto(require('node:url').pathToFileURL(path.join(root,'Sentence Workshop v0.7.6.html')).href);
+  const offline=await context.newPage(),file=path.join(root,'Sentence Workshop v0.7.6.html'),url=require('node:url').pathToFileURL(file).href;
+  offline.on('pageerror',error=>errors.push(error.message));await offline.route(url,route=>route.fulfill({contentType:'text/html',body:testingHtml(file)}));await offline.goto(url);
   await offline.locator('#intro-infographic').evaluate(image=>image.decode());await offline.locator('#intro-infographic-status').waitFor({state:'hidden'});await offline.locator('#lesson-menu > summary').tap();await offline.getByRole('button',{name:/^I\.2 Verbs:/}).tap();
   await offline.locator('#intro-infographic').evaluate(image=>image.decode());await offline.locator('#intro-infographic-status').waitFor({state:'hidden'});assert(await offline.locator('#intro-infographic').evaluate(image=>image.currentSrc===SENTENCE_WORKSHOP.INTRO_INFOGRAPHICS.verb.src&&getComputedStyle(image).visibility==='visible'),'Offline Verbs artwork loads correctly');
 }
