@@ -4510,10 +4510,10 @@ const CLASSROOM_REPORT = (() => {
   try{storage=globalThis.localStorage;}catch{}
   const status=message=>{const box=globalThis.document?.getElementById('classroom-status');if(box){box.hidden=!classKey;box.textContent=message;}};
   const key=()=>`sentence-workshop-class-v1:${classKey}:${identity?.id}`;
-  function section(progress,total,open=true){return progress.passed?'Passed':!open?'Locked':progress.ready===total?'Ready for review':progress.lessons.some(l=>l.started)?`Practicing · ${progress.ready}/${total} lessons ready`:'Not started';}
+  function section(progress,total,open=true,canReview=true){return progress.passed?'Passed':!open?'Locked':progress.ready===total&&canReview?'Ready for review':progress.lessons.some(l=>l.started)?`Practicing · ${progress.ready}/${total} lessons ready`:'Not started';}
   function snapshot(student,email){
     const course=PROGRESS.courseProgress(student),intro=INTRODUCTION.progress(student);
-    const sections=[section(intro,8),...DATA.chapters.map(c=>section(PROGRESS.chapter(student,c.tense),6,PROGRESS.chapterOpen(student,c.tense)))];
+    const sections=[section(intro,8,true,intro.reviewOpen),...DATA.chapters.map(c=>section(PROGRESS.chapter(student,c.tense),6,PROGRESS.chapterOpen(student,c.tense),PROGRESS.reviewOpen(student,c.tense)))];
     const view=student.introduction?.view?.active?student.introduction.view:student.view;
     const activity=view?.source?.lesson?'Introduction · '+(INTRODUCTION.lessons.find(l=>l.id===view.source.lesson)?.title||'Review'):view?.source?.tense?(DATA.chapters.find(c=>c.tense===view.source.tense)?.title||'')+' · '+(view.review?'Review':DATA.lessons.find(l=>l.id===view.selectedStage)?.title||'Practice'):'';
     return {app:'SentenceWorkshop',schema:1,classKey,spreadsheetId,studentKey:student.id,name:student.name,email,completed:course.completed,total:course.total,percent:course.percent,sections,checked:student.attempts.filter(r=>r.first).length+(student.introduction?.attempts||[]).filter(r=>r.first).length,activity};

@@ -46,10 +46,16 @@ function client(classKey='IP5/8',testing=false){
   vm.runInContext(source.replace("if(typeof document!=='undefined')UI.init();",'').replace('RECEIVER_URL_PENDING','https://script.google.com/macros/s/fixture/exec').replace('const TESTING_MODE = false;',`const TESTING_MODE = ${testing};`),context);
   const {CLASSROOM_REPORT:R,PROGRESS:P}=context.SENTENCE_WORKSHOP;
   const student={id:'google:Student',name:'Student',attempts:[],view:null};P.migrate(student);
-  return {R,P,student,calls,storage,timers,box,fail:value=>fail=value,hold:value=>hold=value};
+  return {R,P,I:context.SENTENCE_WORKSHOP.INTRODUCTION,student,calls,storage,timers,box,fail:value=>fail=value,hold:value=>hold=value};
 }
 
 async function checkClient(){
+  const repair=client(),intro=repair.student.introduction;
+  intro.attempts=repair.I.categories.flatMap((lesson,i)=>Array.from({length:5},(_,index)=>({id:lesson+index,mode:'practice',source:{lesson,index,version:2},first:{correct:true},at:index})));
+  assert.equal(repair.R.snapshot(repair.student,'student@example.com').sections[0],'Ready for review');
+  intro.attempts.push(...repair.I.categories.flatMap((lesson,i)=>[0,1].map(index=>({id:'failed-'+lesson+index,mode:'review',reviewId:'failed-review',slot:i*2+index,source:{lesson,index,version:2},first:{correct:false},finished:i===7&&index===1,at:20+i*2+index}))));
+  assert.equal(repair.I.progress(repair.student).ready,8);assert.equal(repair.I.progress(repair.student).reviewOpen,false);
+  assert.equal(repair.R.snapshot(repair.student,'student@example.com').sections[0],'Practicing · 8/8 lessons ready','Recovery practice must not be reported as ready for review');
   const queued=client();queued.R.connected(queued.student,'student@example.com');const due=[...queued.timers.keys()];queued.student.name='Changed while practicing';queued.R.changed(queued.student);assert.deepEqual([...queued.timers.keys()],due,'Continuous practice must not postpone reporting indefinitely');
   const c=client();c.R.init();assert(c.box.textContent.includes('IP5/8'));
   c.R.connected(c.student,'student@example.com');assert.equal(c.storage.size,1);await c.R.flush();
