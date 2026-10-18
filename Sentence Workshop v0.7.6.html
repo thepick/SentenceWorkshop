@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://accounts.google.com/gsi/client; img-src 'self' data:; manifest-src 'self'; style-src 'unsafe-inline' https://accounts.google.com/gsi/style; connect-src https://www.googleapis.com https://accounts.google.com/gsi/; frame-src https://accounts.google.com/gsi/; base-uri 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://accounts.google.com/gsi/client; img-src 'self' data:; manifest-src 'self'; style-src 'unsafe-inline' https://accounts.google.com/gsi/style; connect-src https://www.googleapis.com https://accounts.google.com/gsi/ https://script.google.com https://script.googleusercontent.com; frame-src https://accounts.google.com/gsi/; base-uri 'none'; object-src 'none'">
 <title>Sentence Workshop</title><style>
 :root{color-scheme:light;--ink:#203343;--muted:#617080;--blue:#245d89;--line:#dce4e8;--green:#26705b;--correction:#a51d2c}*{box-sizing:border-box}body{margin:0;color:var(--ink);background:#f3f6f5;font:17px/1.5 system-ui,Segoe UI,sans-serif}main{max-width:900px;margin:auto;padding:32px 24px 50px}header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:30px}h1{font-size:27px;letter-spacing:-.04em;margin:0}h2{font-size:25px;line-height:1.4;margin:7px 0 6px}h3{font-size:18px;margin:16px 0 8px}p{margin:8px 0}.hint{color:var(--muted);font-size:14px}.eyebrow{font-size:12px;font-weight:750;text-transform:uppercase;letter-spacing:.1em;color:var(--green)}.card{background:white;border:1px solid var(--line);border-radius:18px;padding:28px}.instruction{margin-bottom:25px}button{font:inherit;font-weight:600;min-height:44px;padding:9px 15px;border:1px solid var(--line);border-radius:9px;background:white;color:var(--ink);cursor:pointer}button:hover:not(:disabled){border-color:var(--blue);background:#eef4fa}button.primary{background:var(--blue);border-color:var(--blue);color:white}button.primary:hover:not(:disabled){background:#184a72}button:disabled{opacity:.45;cursor:default}button:focus-visible,summary:focus-visible{outline:3px solid var(--blue);outline-offset:3px}.quiet{border-color:transparent;background:transparent;font-size:14px;color:var(--muted)}.workspace{display:flex;align-items:baseline;position:relative;align-content:flex-start;flex-wrap:wrap;gap:9px;min-height:80px;border:2px dashed #bccedb;border-radius:12px;padding:10px 12px;background:#fcfdff}.workspace button,.word-list button{font-size:21px;min-height:40px;height:40px;padding:2px 8px;line-height:30px;cursor:grab;user-select:none}.workspace button:active,.word-list button:active{cursor:grabbing}.workspace button[aria-pressed=true]{border-color:var(--blue);background:#e6effa;outline:2px solid var(--blue)}.workspace button.active-correction{outline:2px solid var(--correction);outline-offset:2px}.correction-steps{list-style:none;margin:8px 0;padding:0}.correction-step{display:flex;align-items:baseline;gap:8px;width:100%;text-align:left;min-height:44px;padding:5px 6px;margin:3px 0;background:transparent;border-color:transparent;font-size:14px;font-weight:500}.step-number{flex:0 0 28px;line-height:28px;text-align:center;color:var(--correction);font-weight:700;border-radius:50%}.correction-step[aria-current=step] .step-number{background:#e1e4e8}.correction-step:hover:not(:disabled){border-color:transparent;background:#eceef1}.correction-step:disabled{opacity:.6;cursor:default;color:var(--muted)}.workspace button.drop-before::before,.workspace button.drop-after::before,.workspace.drop-empty::before{content:"";position:absolute;top:-3px;width:10px;height:calc(100% + 6px);background:var(--blue);clip-path:polygon(0 0,100% 0,60% 10%,60% 90%,100% 100%,0 100%,40% 90%,40% 10%);pointer-events:none;z-index:1}.workspace button.drop-before::before{left:-10px}.workspace button.drop-after::before{right:-10px}.workspace.drop-empty::before{left:2px;top:10px;height:46px}.placeholder{color:#758593;align-self:center;font-size:16px;pointer-events:none}.word-options{position:fixed;z-index:20;display:flex;gap:6px;flex-wrap:wrap;width:max-content;max-width:min(360px,calc(100vw - 16px));max-height:calc(100vh - 16px);overflow-y:auto;padding:8px;margin:0;background:white;border:1px solid #c5d2dd;border-radius:12px;box-shadow:0 8px 24px #20334326}.word-options button{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;padding:7px 11px;min-height:44px;line-height:1.25;font-size:16px}.word-options button span,.word-options button small{display:block}.word-options button small{font-size:11px;color:var(--muted);font-weight:500}.word-options button[aria-pressed=true]{border-color:var(--blue);background:#dce9f7}.word-options .capital-toggle{background:#edf0f3}.word-options .capital-toggle[aria-pressed=true],.word-options .capital-toggle:hover:not(:disabled){background:#d7dde3}.word-box{margin:0;border:1px solid var(--line);border-radius:12px;padding:10px 14px 14px;background:#f5f8f9}.word-list{display:flex;gap:16px 24px;flex-wrap:wrap;align-items:flex-start}.bank-group{min-width:0}.bank-group h4{margin:0 0 7px;font-size:11px;font-weight:600;color:var(--muted)}.group-words{display:flex;flex-wrap:wrap;gap:8px}.word-list button{background:white}.punctuation{display:flex;gap:8px}.punctuation button{font-size:20px;height:40px;padding:2px 17px;line-height:30px}.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.actions .spacer{flex:1}.feedback{margin-top:16px;border-radius:10px;padding:13px;background:#f3f5f7}.feedback.pass{background:#eaf5ee;color:#21654d}.feedback p{font-size:16px}#edit-status:empty{display:none}details{margin:14px 0}summary{cursor:pointer;font-weight:600;font-size:15px}[hidden]{display:none!important}@media(max-width:600px){main{padding:18px 12px 32px}header{margin-bottom:20px}h1{font-size:23px}h2{font-size:22px}.card{padding:18px}.workspace{padding:10px 12px}.workspace button,.word-list button{font-size:19px;padding:2px 8px}.word-box{padding:10px 12px 12px}}
 
@@ -61,7 +61,7 @@ button.advance{background:#246b4b;border-color:#246b4b;color:#fff;font-weight:65
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 </head><body id="app-body"><a id="activity-shortcut" class="activity-shortcut" href="#challenge-title">Skip to activity</a><main>
-<header><div class="brand"><svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect width="48" height="48" rx="14" fill="#245d89"/><rect x="9" y="11" width="18" height="10" rx="3" fill="#fff4d4"/><rect x="30" y="11" width="9" height="10" rx="3" fill="#d9efdf"/><rect x="9" y="26" width="10" height="10" rx="3" fill="#e8f1ff"/><rect x="22" y="26" width="13" height="10" rx="3" fill="#d9efdf"/><circle cx="39" cy="34" r="2" fill="#fff4d4"/></svg><h1>Sentence <span>Workshop</span></h1></div><div id="google-controls" class="google-controls"><span id="google-dot" data-state="signed-out" aria-hidden="true" title="Not signed in"></span><span id="google-account" hidden></span><button id="google-signin" disabled>Sign in with Google</button><a id="google-hosted" href="https://thepick.github.io/SentenceWorkshop/" target="_blank" rel="noopener" aria-label="Sign in with Google on the hosted website (opens a new tab)" hidden>Sign in with Google</a><button id="google-sync" class="quiet" hidden>Sync now</button><button id="google-signout" class="quiet" hidden>Sign out</button></div></header><p id="google-status" role="status"></p>
+<header><div class="brand"><svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect width="48" height="48" rx="14" fill="#245d89"/><rect x="9" y="11" width="18" height="10" rx="3" fill="#fff4d4"/><rect x="30" y="11" width="9" height="10" rx="3" fill="#d9efdf"/><rect x="9" y="26" width="10" height="10" rx="3" fill="#e8f1ff"/><rect x="22" y="26" width="13" height="10" rx="3" fill="#d9efdf"/><circle cx="39" cy="34" r="2" fill="#fff4d4"/></svg><h1>Sentence <span>Workshop</span></h1></div><div id="google-controls" class="google-controls"><span id="google-dot" data-state="signed-out" aria-hidden="true" title="Not signed in"></span><span id="google-account" hidden></span><button id="google-signin" disabled>Sign in with Google</button><a id="google-hosted" href="https://thepick.github.io/SentenceWorkshop/" target="_blank" rel="noopener" aria-label="Sign in with Google on the hosted website (opens a new tab)" hidden>Sign in with Google</a><button id="google-sync" class="quiet" hidden>Sync now</button><button id="google-signout" class="quiet" hidden>Sign out</button></div></header><p id="google-status" role="status"></p><p id="classroom-status" class="hint" role="status" hidden></p>
 <details id="account-menu" class="account-menu" hidden><summary>Progress backup</summary><button id="export-progress" class="quiet">Save backup</button><label id="backup-import-label" class="backup-label">Import your backup<input id="import-progress" type="file" accept=".json,application/json"></label><p id="save-status" class="hint" role="status"></p></details>
 <div id="course-start" class="course-start"><strong>Sign in to start your saved course.</strong><p>You can preview the introduction. Sign in with Google above to practice and keep your progress.</p></div><div id="course-overview" class="course-overview" hidden><strong id="course-total">0% complete</strong><button id="resume-review" class="quiet" hidden>Resume unfinished review</button></div>
 <button id="studied-review" class="quiet" hidden>Review studied tenses</button>
@@ -4501,6 +4501,63 @@ const PROGRESS = (() => {
   return Object.freeze({key,id,clone,empty,activity,challenge,grammar,summary,coverage,stageProgress,chapter,courseProgress,checkpoint,reviewRecords,reviews,migrate,chapterOpen,stageOpen,reviewOpen,recovery,validate,load,save});
 })();
 
+/* CLASS REPORTING — aggregate progress only; private Drive saves remain independent. */
+const CLASSROOM_REPORT = (() => {
+  const classes={'IP5/8':'1oibqmKsvz_LfC9Pg45mqjFd_fJujFG38VjeGNwcsNP4','IP5/9':'16XyCCXlszjz_rEZhKgG6CIowR00ART8V-btavYIyv6c'};
+  const endpoint='https://script.google.com/macros/s/AKfycbwaE60NToAIbrtCKRnPeBphWvEVx3wyLkjlRYf3Tk5j1yIsfUraMKr_qmGYM3GhrsgN6Q/exec';
+  const classKey=globalThis.location?new URLSearchParams(location.search).get('t'):null,spreadsheetId=Object.prototype.hasOwnProperty.call(classes,classKey)?classes[classKey]:null;
+  let identity=null,pending=null,timer=null,running=false,epoch=0,last='',storage;
+  try{storage=globalThis.localStorage;}catch{}
+  const status=message=>{const box=globalThis.document?.getElementById('classroom-status');if(box){box.hidden=!classKey;box.textContent=message;}};
+  const key=()=>`sentence-workshop-class-v1:${classKey}:${identity?.id}`;
+  function section(progress,total,open=true){return progress.passed?'Passed':!open?'Locked':progress.ready===total?'Ready for review':progress.lessons.some(l=>l.started)?`Practicing · ${progress.ready}/${total} lessons ready`:'Not started';}
+  function snapshot(student,email){
+    const course=PROGRESS.courseProgress(student),intro=INTRODUCTION.progress(student);
+    const sections=[section(intro,8),...DATA.chapters.map(c=>section(PROGRESS.chapter(student,c.tense),6,PROGRESS.chapterOpen(student,c.tense)))];
+    const view=student.introduction?.view?.active?student.introduction.view:student.view;
+    const activity=view?.source?.lesson?'Introduction · '+(INTRODUCTION.lessons.find(l=>l.id===view.source.lesson)?.title||'Review'):view?.source?.tense?(DATA.chapters.find(c=>c.tense===view.source.tense)?.title||'')+' · '+(view.review?'Review':DATA.lessons.find(l=>l.id===view.selectedStage)?.title||'Practice'):'';
+    return {app:'SentenceWorkshop',schema:1,classKey,spreadsheetId,studentKey:student.id,name:student.name,email,completed:course.completed,total:course.total,percent:course.percent,sections,checked:student.attempts.filter(r=>r.first).length+(student.introduction?.attempts||[]).filter(r=>r.first).length,activity};
+  }
+  function remember(){try{if(pending)storage?.setItem(key(),JSON.stringify(pending));else storage?.removeItem(key());}catch{}}
+  async function request(url,options){
+    const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),20000);
+    try{return await fetch(url,{...options,signal:controller.signal,credentials:'omit'});}finally{clearTimeout(timeout);}
+  }
+  function confirmed(data,p){return data?.ok&&data.receiver==='sentenceworkshop-progress-v1'&&data.spreadsheetId===p.spreadsheetId;}
+  async function flush(){
+    clearTimeout(timer);timer=null;if(!identity||!pending||running||!spreadsheetId)return;
+    const p=pending,session=epoch;running=true;status(`Sending progress to ${classKey}…`);
+    try{
+      const route=endpoint+'?classKey='+encodeURIComponent(classKey)+'&spreadsheetId='+encodeURIComponent(spreadsheetId);
+      const ready=await (await request(route)).json();if(!confirmed(ready,p))throw Error('The class tracker is unavailable.');if(session!==epoch)return;
+      await request(endpoint,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify(p)});
+      const receipt=await (await request(route+'&id='+encodeURIComponent(p.id))).json();
+      if(!confirmed(receipt,p)||receipt.id!==p.id||!receipt.saved)throw Error('The class tracker has not confirmed this update.');
+      if(session!==epoch)return;
+      if(pending?.id===p.id){last=JSON.stringify(snapshotFields(p));pending=null;remember();status(`Progress sent to ${classKey}.`);}
+    }catch{if(session===epoch)status(`Class progress is waiting to send to ${classKey}. Keep this page open; it will retry automatically.`);}
+    finally{running=false;if(identity&&pending)timer=setTimeout(flush,pending.id===p.id?30000:1000);}
+  }
+  function snapshotFields(p){const {id,at,...fields}=p;return fields;}
+  function changed(student){
+    if(!identity||student.id!==identity.id||!spreadsheetId)return;
+    const data=snapshot(student,identity.email),fingerprint=JSON.stringify(data);
+    if(!pending&&fingerprint===last||pending&&fingerprint===JSON.stringify(snapshotFields(pending)))return;
+    pending={...data,id:PROGRESS.id()+'-'+Date.now().toString(36),at:Date.now()};remember();if(!timer&&!running)timer=setTimeout(flush,10000);
+  }
+  function connected(student,email){
+    ++epoch;clearTimeout(timer);identity=null;pending=null;last='';
+    if(TESTING_MODE||!spreadsheetId){status(classKey?'This class link is not valid. Progress will not be sent to a class.':'');return;}
+    identity={id:student.id,email};
+    try{const saved=JSON.parse(storage?.getItem(key())||'null');if(saved?.studentKey===student.id&&saved.email===email&&saved.classKey===classKey&&saved.spreadsheetId===spreadsheetId)pending=saved;}catch{}
+    changed(student);if(pending){clearTimeout(timer);timer=setTimeout(flush,1000);}status(`Class ${classKey} · your progress is shared with your teacher.`);
+  }
+  function disconnected(){++epoch;clearTimeout(timer);identity=null;pending=null;last='';init();}
+  function init(){status(!classKey?'':spreadsheetId?`Class ${classKey} · sign in with Google to share progress with your teacher.`:'This class link is not valid. Progress will not be sent to a class.');}
+  if(globalThis.addEventListener)globalThis.addEventListener('online',flush);
+  return Object.freeze({init,connected,disconnected,changed,flush,snapshot});
+})();
+
 /* GOOGLE SYNC — Drive app-data, isolated per account; OAuth tokens stay in memory. */
 const GOOGLE_SYNC = (() => {
   const clientId='32076530418-rlc7cj7m477k8l94bbtlhoi8dcish5vi.apps.googleusercontent.com';
@@ -4674,7 +4731,7 @@ const UI = (() => {
   function saveProgress(){
     if(!introActive)student.view={source:source(),challenge:PROGRESS.clone(currentActivity.challenge),tokens:[...tokens],attemptId,selectedStage,sessionStart,completedCount:completed.length,checked:Boolean(currentResult),review:review?{id:review.id,mixed:review.mixed,studied:Boolean(review.studied),index:review.index,finished:review.finished,order:review.order,...(review.replacementSlots?{replacementSlots:review.replacementSlots,replacementIndex:review.replacementIndex}:{})}:null};
     student.updatedAt=Date.now();
-    if(googleSession)GOOGLE_SYNC.changed(student);else if(TESTING_MODE)saveTestingProgress();
+    if(googleSession){GOOGLE_SYNC.changed(student);CLASSROOM_REPORT.changed(student);}else if(TESTING_MODE)saveTestingProgress();
   }
   function accountMenu(){
     get('account-menu').hidden=!canUse();
@@ -5419,18 +5476,18 @@ const UI = (() => {
     touchInput?.addEventListener('change',closeWordMenu);
     globalThis.visualViewport?.addEventListener('resize',closeWordMenu);
     for(const [button,imageId] of [['intro-art-open','intro-infographic'],['lesson-art-open','lesson-infographic']])get(button).addEventListener('click',()=>{const source=get(imageId);setLessonImage('art-image',{src:source.src,alt:source.alt,width:source.getAttribute('width'),height:source.getAttribute('height')});get('art-description').textContent=source.alt;get('art-dialog').showModal();});
-    initIntro();accountMenu();
+    initIntro();accountMenu();CLASSROOM_REPORT.init();
     if(!TESTING_MODE)GOOGLE_SYNC.init({
       status:googleStatus,
       available:()=>{get('google-signin').disabled=false;googleStatus('Sign in with Google to save your progress across devices.','signed-out');},
       unavailable:message=>{const localFile=!globalThis.location||location.protocol==='file:';get('google-signin').disabled=true;get('google-signin').hidden=localFile;get('google-hosted').hidden=!localFile;googleStatus(message,'signed-out');},
       busy:value=>{get('app-layout').inert=value;if(!value&&!get('course-complete').hidden)focusActivity();get('account-menu').inert=value;get('studied-review').disabled=value;for(const id of ['google-signin','google-sync','google-signout'])get(id).disabled=value;},
       reconnect:()=>{get('google-signin').hidden=false;get('google-signin').textContent='Reconnect Google';},
-      connected:(person,email)=>{googleSession=true;restoreStudent(person);get('google-account').textContent=email;get('google-account').hidden=false;get('google-signin').hidden=true;get('google-sync').hidden=false;get('google-signout').hidden=false;},
-      merged:person=>{student.attempts=person.attempts;student.removedAttempts=person.removedAttempts;student.course=person.course||student.course;student.introduction=person.introduction||student.introduction;renderLessons();renderProgress();if(introActive)renderIntro();},
-      disconnected:()=>{googleSession=false;restoreStudent({id:'session',name:'This session',attempts:[],view:null});get('google-account').hidden=true;get('google-signin').hidden=false;get('google-signin').textContent='Sign in with Google';get('google-sync').hidden=true;get('google-signout').hidden=true;}
+      connected:(person,email)=>{googleSession=true;CLASSROOM_REPORT.connected(person,email);restoreStudent(person);get('google-account').textContent=email;get('google-account').hidden=false;get('google-signin').hidden=true;get('google-sync').hidden=false;get('google-signout').hidden=false;},
+      merged:person=>{student.attempts=person.attempts;student.removedAttempts=person.removedAttempts;student.course=person.course||student.course;student.introduction=person.introduction||student.introduction;CLASSROOM_REPORT.changed(student);renderLessons();renderProgress();if(introActive)renderIntro();},
+      disconnected:()=>{CLASSROOM_REPORT.disconnected();googleSession=false;restoreStudent({id:'session',name:'This session',attempts:[],view:null});get('google-account').hidden=true;get('google-signin').hidden=false;get('google-signin').textContent='Sign in with Google';get('google-sync').hidden=true;get('google-signout').hidden=true;}
     });
-    get('google-signin').addEventListener('click',()=>GOOGLE_SYNC.signIn());get('google-sync').addEventListener('click',()=>GOOGLE_SYNC.flush());get('google-signout').addEventListener('click',()=>GOOGLE_SYNC.signOut());
+    get('google-signin').addEventListener('click',()=>GOOGLE_SYNC.signIn());get('google-sync').addEventListener('click',()=>{GOOGLE_SYNC.flush();CLASSROOM_REPORT.flush();});get('google-signout').addEventListener('click',()=>GOOGLE_SYNC.signOut());
     function copyToGoogle(person){
       const owner=student.id.slice(7),stamp=Date.now(),wrap=profile=>({app:'SentenceWorkshop',schema:1,owner,device:'profile-copy',updatedAt:profile.updatedAt||0,profile});
       const incoming={...PROGRESS.clone(person),id:student.id,name:student.name,updatedAt:stamp};PROGRESS.migrate(incoming);
@@ -5503,6 +5560,6 @@ const UI = (() => {
   const snapshot=()=>JSON.parse(JSON.stringify({tokens,challenge:currentActivity.challenge,result:currentResult,pair}));
   return Object.freeze({init,edit,displaySentence,forms,rootOf,wordParts,correctionSteps,snapshot,introSnapshot:()=>PROGRESS.clone(student.introduction),introActive:()=>introActive});
 })();
-globalThis.SENTENCE_WORKSHOP={VERSION,TESTING_MODE,DATA,CURRICULUM,ENGINE,STORE,PROGRESS,GOOGLE_SYNC,UI,SELFTEST,INTRODUCTION,INTRO_INFOGRAPHICS};
+globalThis.SENTENCE_WORKSHOP={VERSION,TESTING_MODE,DATA,CURRICULUM,ENGINE,STORE,PROGRESS,GOOGLE_SYNC,CLASSROOM_REPORT,UI,SELFTEST,INTRODUCTION,INTRO_INFOGRAPHICS};
 if(typeof document!=='undefined')UI.init();
 </script></body></html>

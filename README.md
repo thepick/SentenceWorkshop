@@ -45,6 +45,21 @@ Check/Submit buttons are blue. Earned next-question, next-lesson and next-chapte
 3. Start Words and their jobs, study the lesson example, then practice.
 4. Complete each lesson and pass its section review to unlock the next section.
 
+## Class progress Sheets
+
+Students use their class link and sign in with Google. Their existing personal course progress is summarized automatically in that class’s private Sheet; students appear after their first successful report. No new student account or separate class progress store is created.
+
+| Class | Student link | Teacher Sheet |
+| --- | --- | --- |
+| IP5/8 | https://sentenceworkshop.mtomlinson.ca/?t=IP5/8 | https://docs.google.com/spreadsheets/d/1oibqmKsvz_LfC9Pg45mqjFd_fJujFG38VjeGNwcsNP4/edit |
+| IP5/9 | https://sentenceworkshop.mtomlinson.ca/?t=IP5/9 | https://docs.google.com/spreadsheets/d/16XyCCXlszjz_rEZhKgG6CIowR00ART8V-btavYIyv6c/edit |
+
+The ordinary site sends no class reports, and invalid class codes fail closed. Reports include name/email, overall completion, each section’s progress, checked-answer count and latest activity. Sentence text, individual answers and access tokens stay out of the reporting Sheets. Each Sheet has a student summary and a hidden Update Log. Failed sends retry while the app is open, keep an account/class-specific pending summary for the next sign-in, and can be retried with Sync now. A successful status requires a matching stored receipt, not merely a successful network request.
+
+`classroom-receiver.gs` is the separate Apps Script receiver; it accepts only these two configured spreadsheet/class pairs, validates summaries, serializes writes, deduplicates retries and prevents stale reports replacing newer summaries. The Sheets stay private. Like FactFlow, this is a lightweight self-reported tracker, not secure enrollment or a verified gradebook. See [class reporting setup](CLASSROOM-REPORTING.md) and the [privacy notice](privacy.html).
+
+Run `node tests/classroom-report.cjs` for reporting checks. Standard sign-in and chapter gates are checked with `node tests/standard-access.cjs`.
+
 Every account follows the same sequence: finish each Introduction lesson, pass its review, then finish the six lessons and pass the review in each building chapter before starting the next. Lesson navigation is locked during an unfinished review. Current activities and reviews resume after signing in again. Earlier earned passes remain valid; old access flags do not bypass prerequisites.
 
 The interface adapts to desktop, tablet and phone screens. At widths up to 1000 pixels, Lessons becomes a collapsed picker and closes after an activity is selected. Wider screens retain the sidebar. Touch devices have larger word and punctuation tiles; tapping a sentence tile opens Move left, Move right, Insert before and Remove alongside its word forms. These extra buttons are absent on mouse-only desktops. Touchscreen computers also receive the touch controls. All edits support Undo and retain the existing saved-draft behavior. Parts-of-speech labels remain centered beneath their tiles at a readable 12 pixels.
